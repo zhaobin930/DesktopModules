@@ -1,0 +1,10 @@
+﻿/*  TO Register PortalShare Tab */
+DECLARE @DesktopModuleID int
+DECLARE @ModuleDefID int
+DECLARE @TabId int
+DECLARE @ModuleId int
+INSERT INTO {databaseOwner}[{objectQualifier}DesktopModules] ([FriendlyName], [Description], [Version], [IsPremium], [IsAdmin], [BusinessControllerClass], [FolderName], [ModuleName], [SupportedFeatures]) VALUES (N'MobileAdmin', N'MobileAdmin in This Host', NULL, 0, 1, N'', N'MobileAdmin', N'MobileAdmin', 0)
+SELECT @DesktopModuleID = SCOPE_IDENTITY()
+INSERT INTO {databaseOwner}[{objectQualifier}ModuleDefinitions] ([FriendlyName], [DesktopModuleID], [DefaultCacheTime]) VALUES (N'MobileAdmin', @DesktopModuleID, 0)
+SELECT @ModuleDefID = SCOPE_IDENTITY()
+INSERT INTO {databaseOwner}[{objectQualifier}ModuleControls] ([ModuleDefID], [ControlKey], [ControlTitle], [ControlSrc], [IconFile], [ControlType], [ViewOrder], [HelpUrl]) VALUES (@ModuleDefID, NULL, NULL, N'DesktopModules/MobileAdmin/Main.ascx', NULL, 2, 0, NULL)

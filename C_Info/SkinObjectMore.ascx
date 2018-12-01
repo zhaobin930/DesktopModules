@@ -1,0 +1,2 @@
+<%@ Control Language="vb" AutoEventWireup="false" Inherits="EasySite.Modules.C_Info.SkinObjectMore" Codebehind="SkinObjectMore.ascx.vb" %>
+<asp:HyperLink ID="hylLink" runat="server" CssClass="" EnableViewState="false"></asp:HyperLink>

@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="plPortals.Text" xml:space="preserve">
+    <value>站点</value>
+  </data>
+<data name="plPortals.Help" xml:space="preserve">
+    <value>请选择站点。</value>
+  </data>
+  <data name="plTabs.Text" xml:space="preserve">
+    <value>频道</value>
+  </data>
+<data name="plTabs.Help" xml:space="preserve">
+    <value>请选择频道。</value>
+  </data>
+  <data name="plDisplaySubLevel.Text" xml:space="preserve">
+    <value>显示子频道</value>
+  </data>
+<data name="plDisplaySubLevel.Help" xml:space="preserve">
+    <value>请选择是否显示子频道。</value>
+  </data>
+  <data name="plMenuHeader.Text" xml:space="preserve">
+    <value>菜单页眉</value>
+  </data>
+<data name="plMenuHeader.Help" xml:space="preserve">
+    <value>请输入菜单页眉样式。</value>
+  </data>
+  <data name="plMenuFirstLevelHeader.Text" xml:space="preserve">
+    <value>一级菜单左HTML</value>
+  </data>
+<data name="plMenuFirstLevelHeader.Help" xml:space="preserve">
+    <value>请输入一级菜单左HTML。</value>
+  </data>
+  <data name="plMenuSecondLevelHeader.Text" xml:space="preserve">
+    <value>二级菜单左HTML</value>
+  </data>
+<data name="plMenuSecondLevelHeader.Help" xml:space="preserve">
+    <value>请输入二级菜单左HTML。</value>
+  </data>
+  <data name="plMenuSecondLevelFooter.Text" xml:space="preserve">
+    <value>二级菜单右HTML</value>
+  </data>
+<data name="plMenuSecondLevelFooter.Help" xml:space="preserve">
+    <value>请输入二级菜单右HTML。</value>
+  </data>
+  <data name="plMenuFirstLevelFooter.Text" xml:space="preserve">
+    <value>一级菜单右HTML</value>
+  </data>
+<data name="plMenuFirstLevelFooter.Help" xml:space="preserve">
+    <value>请输入一级菜单右HTML。</value>
+  </data>
+  <data name="plMenuFooter.Text" xml:space="preserve">
+    <value>菜单页脚</value>
+  </data>
+<data name="plMenuFooter.Help" xml:space="preserve">
+    <value>请输入菜单页脚样式。</value>
+  </data>
+  <data name="plMenuFirstLevelRepeatDirection.Text" xml:space="preserve">
+    <value>一级重复方式</value>
+  </data>
+<data name="plMenuFirstLevelRepeatDirection.Help" xml:space="preserve">
+    <value>请选择一级重复方式。</value>
+  </data>
+  <data name="plMenuSecondLevelRepeatDirection.Text" xml:space="preserve">
+    <value>二级重复方式</value>
+  </data>
+  <data name="plMenuSecondLevelRepeatDirection.Help" xml:space="preserve">
+    <value>请选择二级重复方式。</value>
+  </data>
+  <data name="plMenuSecondLevelColumns.Text" xml:space="preserve">
+    <value>二级显示列数</value>
+  </data>
+<data name="plMenuSecondLevelColumns.Help" xml:space="preserve">
+    <value>请输入二级显示列数。</value>
+  </data>
+  <data name="plDisplayHiddenTabs.Text" xml:space="preserve">
+    <value>显示隐藏频道</value>
+  </data>
+<data name="plDisplayHiddenTabs.Help" xml:space="preserve">
+    <value>请选择是否显示隐藏频道。</value>
+  </data>
+  <data name="plDisplayCurrentSubTabs.Text" xml:space="preserve">
+    <value>仅显示当前子频道</value>
+  </data>
+<data name="plDisplayCurrentSubTabs.Help" xml:space="preserve">
+    <value>请选择是否仅显示当前子频道。</value>
+  </data>
+  <data name="plStyleName.Text" xml:space="preserve">
+    <value>样式名称</value>
+  </data>
+<data name="plStyleName.Help" xml:space="preserve">
+    <value>请输入样式名称。</value>
+  </data>
+  <data name="plStyles.Text" xml:space="preserve">
+    <value>选择样式</value>
+  </data>
+<data name="plStyles.Help" xml:space="preserve">
+    <value>请选择已存在的样式。</value>
+  </data>
+  <data name="plSubGroupHeader.Text" xml:space="preserve">
+    <value>子菜单页眉</value>
+  </data>
+<data name="plSubGroupHeader.Help" xml:space="preserve">
+    <value>请输入子菜单页眉样式。</value>
+  </data>
+  <data name="plSubGroupFooter.Text" xml:space="preserve">
+    <value>子菜单页脚</value>
+  </data>
+<data name="plSubGroupFooter.Help" xml:space="preserve">
+    <value>请输入子菜单页脚样式。</value>
+  </data>
+  <data name="plMenuFirstLevelColumns.Text" xml:space="preserve">
+    <value>一级显示列数</value>
+  </data>
+<data name="plMenuFirstLevelColumns.Help" xml:space="preserve">
+    <value>请输入一级显示列数。</value>
+  </data>
+  <data name="horz.Text" xml:space="preserve">
+    <value>水平</value>
+  </data>
+  <data name="vert.Text" xml:space="preserve">
+    <value>垂直</value>
+  </data>
+  <data name="SaveStyle.Text" xml:space="preserve">
+    <value>保存样式</value>
+  </data>
+   <data name="LoadStyle.Text" xml:space="preserve">
+    <value>加载样式</value>
+  </data>
+  <data name="DeleteStyle.Text" xml:space="preserve">
+    <value>删除样式</value>
+  </data>
+  <data name="ControlTitle_settings.Text" xml:space="preserve">
+    <value>二级菜单设置</value>
+  </data>
+  <data name="plMenuFirstLevelFirstHeader.Text" xml:space="preserve">
+    <value>一级菜单第一个左HTML</value>
+  </data>
+<data name="plMenuFirstLevelFirstHeader.Help" xml:space="preserve">
+    <value>请输入一级菜单第一个左HTML。</value>
+  </data>
+  <data name="plMenuFirstLevelLastFooter.Text" xml:space="preserve">
+    <value>一级菜单最后一个右HTML</value>
+  </data>
+<data name="plMenuFirstLevelLastFooter.Help" xml:space="preserve">
+    <value>请输入一级菜单最后一个右HTML。</value>
+  </data>
+  <data name="plMenuItemTemplate.Text" xml:space="preserve">
+    <value>菜单项模版</value>
+  </data>
+  <data name="plMenuItemTemplate.Help" xml:space="preserve">
+    <value>指定菜单项模版，可用的标签有：[ICON],[ICONLARGE],[TABLINK]。</value>
+  </data>
+</root>

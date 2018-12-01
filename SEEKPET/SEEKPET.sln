@@ -1,0 +1,50 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEEKPET", "SEEKPET.csproj", "{91515E01-10BB-41DB-9E78-90D4C0A01B26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEEKPET.Info", "..\SEEKPET.Info\SEEKPET.Info.csproj", "{D04C1C14-C7C4-49C6-9096-F0BFD2DBD24E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEEKPET.SqlDataProvider", "..\SEEKPET.SqlDataProvider\SEEKPET.SqlDataProvider.csproj", "{3D68452D-578D-4225-8B3D-76728E403F52}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEEKPET.Module", "..\SEEKPET.Module\SEEKPET.Module.csproj", "{0858F3A6-D08A-49C0-80EE-AAC4BD963C69}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEEKPET.WxPayAPI", "..\SEEKPET.WxPayAPI\SEEKPET.WxPayAPI.csproj", "{9306D508-7AB9-4FB0-AF68-FA1ECA82E036}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SEEKPET.WxMessage", "..\SEEKPET.WxMessage\SEEKPET.WxMessage.csproj", "{531C5847-F2A2-4F53-8B14-BE9D385EDEEA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{91515E01-10BB-41DB-9E78-90D4C0A01B26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91515E01-10BB-41DB-9E78-90D4C0A01B26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91515E01-10BB-41DB-9E78-90D4C0A01B26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91515E01-10BB-41DB-9E78-90D4C0A01B26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D04C1C14-C7C4-49C6-9096-F0BFD2DBD24E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D04C1C14-C7C4-49C6-9096-F0BFD2DBD24E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D04C1C14-C7C4-49C6-9096-F0BFD2DBD24E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D04C1C14-C7C4-49C6-9096-F0BFD2DBD24E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D68452D-578D-4225-8B3D-76728E403F52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D68452D-578D-4225-8B3D-76728E403F52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D68452D-578D-4225-8B3D-76728E403F52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D68452D-578D-4225-8B3D-76728E403F52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0858F3A6-D08A-49C0-80EE-AAC4BD963C69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0858F3A6-D08A-49C0-80EE-AAC4BD963C69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0858F3A6-D08A-49C0-80EE-AAC4BD963C69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0858F3A6-D08A-49C0-80EE-AAC4BD963C69}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9306D508-7AB9-4FB0-AF68-FA1ECA82E036}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9306D508-7AB9-4FB0-AF68-FA1ECA82E036}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9306D508-7AB9-4FB0-AF68-FA1ECA82E036}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9306D508-7AB9-4FB0-AF68-FA1ECA82E036}.Release|Any CPU.Build.0 = Release|Any CPU
+		{531C5847-F2A2-4F53-8B14-BE9D385EDEEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{531C5847-F2A2-4F53-8B14-BE9D385EDEEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{531C5847-F2A2-4F53-8B14-BE9D385EDEEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{531C5847-F2A2-4F53-8B14-BE9D385EDEEA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

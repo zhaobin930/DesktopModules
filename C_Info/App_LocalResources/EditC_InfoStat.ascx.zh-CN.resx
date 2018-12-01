@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="ResMimeType">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="Version">
+		<value>1.0.0.0</value>
+	</resheader>
+	<resheader name="Reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="Writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="DateTime.Text">
+		<value>时间：</value>
+	</data>
+	<data name="SelectDate.Text">
+		<value>选择</value>
+	</data>
+	<data name="Category.Text">
+		<value>类别:</value>
+	</data>
+	<data name="ModuleStat.Text">
+		<value>模块统计</value>
+	</data>
+	<data name="TabStat.Text">
+		<value>频道统计</value>
+	</data>
+	<data name="SiteStat.Text">
+		<value>站点统计</value>
+	</data>
+	<data name="UserStat.Text">
+		<value>人员统计</value>
+	</data>
+	<data name="UserRoleStat.Text">
+		<value>角色统计</value>
+	</data>
+	<data name="SpecStat.Text">
+		<value>专题统计</value>
+	</data>
+	<data name="HitsStat.Text">
+		<value>模块点击</value>
+	</data>
+	<data name="AuditStat.Text">
+		<value>审批统计</value>
+	</data>
+	<data name="Stat.Text">
+		<value>统 计</value>
+	</data>
+	<data name="ModuleName.Text">
+		<value>模块名称</value>
+	</data>
+	<data name="InfoCount.Text">
+		<value>信息发布数</value>
+	</data>
+	<data name="TabName.Text">
+		<value>频道名称</value>
+	</data>
+	<data name="SiteName.Text">
+		<value>站点名称</value>
+	</data>
+	<data name="PublicUser.Text">
+		<value>发布人</value>
+	</data>
+	<data name="RoleName.Text">
+		<value>角色名称</value>
+	</data>
+	<data name="SpecName.Text">
+		<value>专题名称</value>
+	</data>
+	<data name="AllClickCount.Text">
+		<value>总共点击次数</value>
+	</data>
+	<data name="ThisWeekClickCount.Text">
+		<value>最近一周信息点击次数</value>
+	</data>
+	<data name="ThisMonthClickCount.Text">
+		<value>最近一月信息点击次数</value>
+	</data>
+	<data name="ThisYearClickCount.Text">
+		<value>最近一年信息点击数</value>
+	</data>
+</root>

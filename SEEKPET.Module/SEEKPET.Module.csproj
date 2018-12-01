@@ -1,0 +1,414 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0858F3A6-D08A-49C0-80EE-AAC4BD963C69}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SEEKPET.Module</RootNamespace>
+    <AssemblyName>SEEKPET.Module</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <UseIISExpress>false</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AspNetPager, Version=7.5.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\AspNetPager.dll</HintPath>
+    </Reference>
+    <Reference Include="EasySite">
+      <HintPath>..\..\bin\EasySite.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationBlocks.Data, Version=2.0.0.0, Culture=neutral">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\bin\Microsoft.ApplicationBlocks.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\bin\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PeoControl.CommonClass">
+      <HintPath>..\..\bin\PeoControl.CommonClass.dll</HintPath>
+    </Reference>
+    <Reference Include="PeoControl.PeoNormalControl">
+      <HintPath>..\..\bin\PeoControl.PeoNormalControl.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Web.Mobile" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="AnimalDetail.ascx" />
+    <Content Include="AnimalInfoEdit.ascx" />
+    <Content Include="AnimalLoss.ascx" />
+    <Content Include="AnimalSeach.ascx" />
+    <Content Include="AnimalSeek.ascx" />
+    <Content Include="AnimalSeekManage.ascx" />
+    <Content Include="CodeEdit.ascx" />
+    <Content Include="CodeManage.ascx" />
+    <Content Include="ConnectWxLogin.ascx" />
+    <Content Include="css\module.css" />
+    <Content Include="HelpDetail.ascx" />
+    <Content Include="HelpEdit.ascx" />
+    <Content Include="HelpManage.ascx" />
+    <Content Include="HospitalEdit.ascx" />
+    <Content Include="HospitalList.ascx" />
+    <Content Include="HospitalListSettings.ascx" />
+    <Content Include="HospitalManage.ascx" />
+    <Content Include="HtmlPage1.html" />
+    <Content Include="html\home.htm" />
+    <Content Include="html\manage.htm" />
+    <Content Include="html\personcenter.htm" />
+    <Content Include="js\common.js" />
+    <Content Include="js\jquery-1.4.1-vsdoc.js" />
+    <Content Include="js\jquery-1.4.1.js" />
+    <Content Include="js\jquery-1.4.1.min.js" />
+    <Content Include="html\menu.htm" />
+    <Content Include="ManagePerson.ascx" />
+    <Content Include="ManagePet.ascx" />
+    <Content Include="PersonalDetail.ascx" />
+    <Content Include="PersonalInfoEdit.ascx" />
+    <Content Include="PersonalPay.ascx" />
+    <Content Include="ConnectQQLogin.ascx" />
+    <Content Include="qqlogin.aspx" />
+    <Content Include="SeeHome.ascx" />
+    <Content Include="SeekMap.ascx" />
+    <Content Include="UniteLogin.ascx" />
+    <Content Include="VxPay.aspx" />
+    <Content Include="VxPayQrCode.aspx" />
+    <Content Include="WebUserPager.ascx" />
+    <Content Include="WxPayResult.ascx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnimalDetail.ascx.cs">
+      <DependentUpon>AnimalDetail.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AnimalDetail.ascx.designer.cs">
+      <DependentUpon>AnimalDetail.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="AnimalInfoEdit.ascx.cs">
+      <DependentUpon>AnimalInfoEdit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AnimalInfoEdit.ascx.designer.cs">
+      <DependentUpon>AnimalInfoEdit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="AnimalLoss.ascx.cs">
+      <DependentUpon>AnimalLoss.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AnimalLoss.ascx.designer.cs">
+      <DependentUpon>AnimalLoss.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="AnimalSeach.ascx.cs">
+      <DependentUpon>AnimalSeach.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AnimalSeach.ascx.designer.cs">
+      <DependentUpon>AnimalSeach.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="AnimalSeek.ascx.cs">
+      <DependentUpon>AnimalSeek.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AnimalSeek.ascx.designer.cs">
+      <DependentUpon>AnimalSeek.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="AnimalSeekManage.ascx.cs">
+      <DependentUpon>AnimalSeekManage.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AnimalSeekManage.ascx.designer.cs">
+      <DependentUpon>AnimalSeekManage.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="appservices\isuserlogin.ashx.cs">
+      <DependentUpon>isuserlogin.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="appservices\userlogin.ashx.cs">
+      <DependentUpon>userlogin.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="appservices\userloginout.ashx.cs">
+      <DependentUpon>userloginout.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="CodeEdit.ascx.cs">
+      <DependentUpon>CodeEdit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CodeEdit.ascx.designer.cs">
+      <DependentUpon>CodeEdit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="CodeManage.ascx.cs">
+      <DependentUpon>CodeManage.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CodeManage.ascx.designer.cs">
+      <DependentUpon>CodeManage.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Component\CommonConfig.cs" />
+    <Compile Include="Component\WxLoginAPI.cs" />
+    <Compile Include="ConnectWxLogin.ascx.cs">
+      <DependentUpon>ConnectWxLogin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ConnectWxLogin.ascx.designer.cs">
+      <DependentUpon>ConnectWxLogin.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HelpDetail.ascx.cs">
+      <DependentUpon>HelpDetail.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HelpDetail.ascx.designer.cs">
+      <DependentUpon>HelpDetail.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HelpEdit.ascx.cs">
+      <DependentUpon>HelpEdit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HelpEdit.ascx.designer.cs">
+      <DependentUpon>HelpEdit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HelpManage.ascx.cs">
+      <DependentUpon>HelpManage.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HelpManage.ascx.designer.cs">
+      <DependentUpon>HelpManage.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HospitalEdit.ascx.cs">
+      <DependentUpon>HospitalEdit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HospitalEdit.ascx.designer.cs">
+      <DependentUpon>HospitalEdit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HospitalList.ascx.cs">
+      <DependentUpon>HospitalList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HospitalList.ascx.designer.cs">
+      <DependentUpon>HospitalList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HospitalListSettings.ascx.cs">
+      <DependentUpon>HospitalListSettings.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HospitalListSettings.ascx.designer.cs">
+      <DependentUpon>HospitalListSettings.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="HospitalManage.ascx.cs">
+      <DependentUpon>HospitalManage.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="HospitalManage.ascx.designer.cs">
+      <DependentUpon>HospitalManage.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ManagePerson.ascx.cs">
+      <DependentUpon>ManagePerson.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ManagePerson.ascx.designer.cs">
+      <DependentUpon>ManagePerson.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ManagePet.ascx.cs">
+      <DependentUpon>ManagePet.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ManagePet.ascx.designer.cs">
+      <DependentUpon>ManagePet.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PersonalDetail.ascx.cs">
+      <DependentUpon>PersonalDetail.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PersonalDetail.ascx.designer.cs">
+      <DependentUpon>PersonalDetail.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PersonalInfoEdit.ascx.cs">
+      <DependentUpon>PersonalInfoEdit.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PersonalInfoEdit.ascx.designer.cs">
+      <DependentUpon>PersonalInfoEdit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="PersonalPay.ascx.cs">
+      <DependentUpon>PersonalPay.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PersonalPay.ascx.designer.cs">
+      <DependentUpon>PersonalPay.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ConnectQQLogin.ascx.cs">
+      <DependentUpon>ConnectQQLogin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ConnectQQLogin.ascx.designer.cs">
+      <DependentUpon>ConnectQQLogin.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="qqlogin.aspx.cs">
+      <DependentUpon>qqlogin.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="qqlogin.aspx.designer.cs">
+      <DependentUpon>qqlogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SeeHome.ascx.cs">
+      <DependentUpon>SeeHome.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SeeHome.ascx.designer.cs">
+      <DependentUpon>SeeHome.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="SeekMap.ascx.cs">
+      <DependentUpon>SeekMap.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SeekMap.ascx.designer.cs">
+      <DependentUpon>SeekMap.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="UniteLogin.ascx.cs">
+      <DependentUpon>UniteLogin.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UniteLogin.ascx.designer.cs">
+      <DependentUpon>UniteLogin.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="appservices\UploadHandler.ashx.cs">
+      <DependentUpon>UploadHandler.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="VxPay.aspx.cs">
+      <DependentUpon>VxPay.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VxPay.aspx.designer.cs">
+      <DependentUpon>VxPay.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="VxPayQrCode.aspx.cs">
+      <DependentUpon>VxPayQrCode.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="VxPayQrCode.aspx.designer.cs">
+      <DependentUpon>VxPayQrCode.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="WebUserPager.ascx.cs">
+      <DependentUpon>WebUserPager.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WebUserPager.ascx.designer.cs">
+      <DependentUpon>WebUserPager.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="WxPayResult.ascx.cs">
+      <DependentUpon>WxPayResult.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="WxPayResult.ascx.designer.cs">
+      <DependentUpon>WxPayResult.ascx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="image\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SEEKPET.Info\SEEKPET.Info.csproj">
+      <Project>{D04C1C14-C7C4-49C6-9096-F0BFD2DBD24E}</Project>
+      <Name>SEEKPET.Info</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SEEKPET.SqlDataProvider\SEEKPET.SqlDataProvider.csproj">
+      <Project>{3D68452D-578D-4225-8B3D-76728E403F52}</Project>
+      <Name>SEEKPET.SqlDataProvider</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SEEKPET.WxPayAPI\SEEKPET.WxPayAPI.csproj">
+      <Project>{9306D508-7AB9-4FB0-AF68-FA1ECA82E036}</Project>
+      <Name>SEEKPET.WxPayAPI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appservices\UploadHandler.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appservices\userlogin.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appservices\isuserlogin.ashx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="appservices\userloginout.ashx" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>24229</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

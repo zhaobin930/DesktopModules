@@ -1,0 +1,1021 @@
+﻿/*
+This version is modified by tph,2007-01
+*/
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+alter table C_InfoModuleInfos
+	add constraint PK_C_InfoModuleInfos primary key clustered (ModuleID, InfoID)   
+
+
+go
+ CREATE  INDEX [IX_C_info_1] ON {databaseOwner}{objectQualifier}[C_info]([ModuleID]) ON [PRIMARY]
+GO
+------------------------
+if not exists (select * from {databaseOwner}{objectQualifier}sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}[C_InfoItemRole]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+begin
+CREATE TABLE {databaseOwner}{objectQualifier}[C_InfoItemRole] (
+	[ItemId] [int] IDENTITY (1, 1) NOT NULL ,
+	[InfoId] [int] NOT NULL ,
+	[RoleId] [int] NOT NULL ,
+	[Memo] [nvarchar] (50) COLLATE Chinese_PRC_CI_AS NULL 
+) ON [PRIMARY]
+
+
+ALTER TABLE {databaseOwner}{objectQualifier}[C_InfoItemRole] ADD 
+	CONSTRAINT [PK_C_InfoItemRole] PRIMARY KEY  CLUSTERED 
+	(
+		[ItemId]
+	)  ON [PRIMARY] 
+
+
+ALTER TABLE {databaseOwner}{objectQualifier}[C_InfoItemRole] ADD 
+	CONSTRAINT [FK_C_InfoItemRole_C_info] FOREIGN KEY 
+	(
+		[InfoId]
+	) REFERENCES {databaseOwner}{objectQualifier}[C_info] (
+		[InfoID]
+	) ON DELETE CASCADE 
+
+end
+
+GO
+
+if exists (select * from {databaseOwner}{objectQualifier}sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}[C_Info_GetItemRoleAndNotInRole]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}[C_Info_GetItemRoleAndNotInRole]
+GO
+
+CREATE PROCEDURE  C_Info_GetItemRoleAndNotInRole
+@InfoId int,
+@portalId int
+ AS
+SELECT Roles.RoleName, Roles.RoleId
+FROM C_InfoItemRole INNER JOIN
+      Roles ON C_InfoItemRole.RoleId = Roles.RoleID
+WHERE (C_InfoItemRole.InfoId = @InfoId)
+
+SELECT Roles.RoleName, Roles.RoleId
+From Roles where portalId = @portalId and Roles.RoleId not in
+( Select RoleId
+FROM C_InfoItemRole
+WHERE C_InfoItemRole.InfoId = @InfoId)
+GO
+
+Alter  PROCEDURE C_InfoGetList
+@PageSize int,
+@CurrentPage int,
+@OrderBy nvarchar(50),
+@SearchCondition varchar(7000),
+--@relatedModuleID use this parameter we can show mulity modules relitive search  by one artitcle
+@relatedModuleIDs varchar(1000),
+@filterUserRoleId int,
+--@IsAdmin use this parameter , we can impore efficiency because we will not need transfer other function use by admin like 'C_InfoWorkFlowGetStatus'
+@IsAdmin bit
+as
+
+declare @sqlstring VARCHAR(8000)
+set @sqlstring=N'
+declare @indextable table(id int identity(1,1),nid int,isRelative bit,CreateDate1 datetime,SortDate1 datetime,SortTop1 bit,Hits1 int,ModuleTitle nvarchar(256))
+declare @PageLowerBound int
+declare @PageUpperBound int
+set @PageLowerBound=('+ cast(@CurrentPage as nvarchar) +'-1)*'+ cast(@PageSize as nvarchar) +'
+set @PageUpperBound=@PageLowerBound+'+ cast(@PageSize as nvarchar) +' 
+--set rowcount @PageUpperBound
+insert into @indextable(nid,isRelative,CreateDate1,SortDate1,SortTop1,Hits1,ModuleTitle)
+select InfoID,0 as isRelative,CreateDate,SortDate,SortTop,Hits,ModuleTitle from C_Info inner join Modules on C_Info.ModuleId=Modules.ModuleId where Modules.IsDeleted=0'
+if(@filterUserRoleId > -1)
+begin
+set @sqlstring=@sqlstring+' And InfoID in( SELECT C_info.InfoId
+FROM C_InfoItemRole INNER JOIN
+      UserRoles ON C_InfoItemRole.RoleId = UserRoles.RoleID RIGHT OUTER JOIN
+      C_info ON C_InfoItemRole.InfoId = C_info.InfoID
+WHERE UserRoles.UserID IS NULL OR UserRoles.UserID =  '+cast(@filterUserRoleId as varchar(10)) + ')'
+end
+set @sqlstring=@sqlstring+ @SearchCondition
+
+if @relatedModuleIDs<>''
+begin
+set @SearchCondition = lower(@SearchCondition)
+set @SearchCondition = replace(@SearchCondition,'c_info.moduleid=','c_info.moduleid<>')
+set @SearchCondition = replace(@SearchCondition,'c_info.moduleid =','c_info.moduleid<>')
+set @SearchCondition = replace(@SearchCondition,'c_info.moduleid in','c_info.moduleid not in')
+set @sqlstring=@sqlstring+ ' 
+union all
+select C_Info.InfoID,1 as isRelative,CreateDate,SortDate,SortTop,Hits,ModuleTitle from C_Info 
+Inner Join C_InfoModuleInfos On C_Info.InfoID=C_InfoModuleInfos.InfoID inner join Modules on C_Info.ModuleId=Modules.ModuleId where Modules.IsDeleted=0 and C_InfoModuleInfos.ModuleID in('+@relatedModuleIDs +')' + @SearchCondition
+end
+if(@filterUserRoleId >-1)
+begin
+set @sqlstring=@sqlstring+'  And InfoID in( SELECT C_info.InfoId
+FROM C_InfoItemRole INNER JOIN
+      UserRoles ON C_InfoItemRole.RoleId = UserRoles.RoleID RIGHT OUTER JOIN
+      C_info ON C_InfoItemRole.InfoId = C_info.InfoID
+WHERE UserRoles.UserID IS NULL OR UserRoles.UserID =  '+cast(@filterUserRoleId as varchar(10)) + ')'
+end
+set @sqlstring=@sqlstring+' order by ' + @OrderBy
++ '
+ select @@RowCount'
++ ' 
+select InfoID,ModuleID,ModuleTitle,CreatedByUser,CreateDate,Title,Description,
+    Source,KeyWords,SetOrder,IsExtURL,ExtURL,Level,
+    CategoryID,Author,Image,ImagePosition,ImageSize,ExpireDate,
+    Email,URL,Syndicate,SortTop,Recommend,TitleStyle,Hits,ApproveStatus,isRelative'
+if @IsAdmin=1
+begin
+set @sqlstring=@sqlstring+',
+    dbo.C_InfoGetCategory(categoryID) as CategoryName,
+    dbo.C_InfoGetPagers(InfoID) as Pagers,
+    dbo.C_InfoWorkFlowGetStatus(InfoID) as WorkFlowStatus,
+    dbo.C_info_GetSpecsByInfoID(InfoID) as Specs'
+end
+set @sqlstring=@sqlstring+'
+from C_Info inner join @indextable as t on C_Info.InfoID=t.nid '
+
+if @PageSize<>0
+	set @sqlstring=@sqlstring+' and t.id>@PageLowerBound and t.id<=@PageUpperBound '
+
+set @sqlstring=@sqlstring+'order by t.id'
+--print(@sqlstring)
+exec (@sqlstring)
+
+--C_InfoGetList 1,1,"createdate desc",'',1,1
+
+GO
+
+
+alter PROCEDURE C_info_GetModules
+@UserId int,
+@PermissionName varchar(20),
+@IsEqual bit
+AS
+if @UserId = 0 and @IsEqual = 1
+begin
+select Modules.ModuleID, ModuleTitle, Modules.PortalID,Tabs.TabName,Tabs.TabID from modules 
+inner join TabModules On TabModules.ModuleID=Modules.ModuleID 
+inner join Tabs On Tabs.TabID=TabModules.TabID
+where 
+ModuleDefID=(select ModuleDefID from ModuleDefinitions where DesktopModuleID=(Select TOP 1 DesktopModuleID from DesktopModules where ModuleName='C_Info')) AND (Tabs.IsDeleted = 0) AND (Modules.IsDeleted = 0) 
+And Modules.ModuleId not in(select ModuleId from ModuleSettings where ModuleSettings.SettingName = 'ModuleType' And (SettingValue ='Search' OR SettingValue ='Detail' OR SettingValue ='UpInfo' OR SettingValue ='MoreList' OR SettingValue ='Spec'))
+return
+end
+if @UserId = 0 and @IsEqual = 0
+begin
+return
+end
+if @UserID = -1 and @PermissionName='Edit' and @IsEqual = 1
+begin
+SELECT DISTINCT 
+      Modules.ModuleID, Modules.ModuleTitle, Modules.PortalID, Tabs.TabName, 
+      Tabs.TabID
+FROM ModulePermission INNER JOIN
+      Permission ON 
+      ModulePermission.PermissionID = Permission.PermissionID INNER JOIN
+      Modules INNER JOIN
+      TabModules ON TabModules.ModuleID = Modules.ModuleID INNER JOIN
+      Tabs ON Tabs.TabID = TabModules.TabID ON 
+      ModulePermission.ModuleID = Modules.ModuleID
+WHERE (Modules.ModuleDefID =
+          (SELECT ModuleDefID
+         FROM ModuleDefinitions
+         WHERE DesktopModuleID =
+                   (SELECT TOP 1 DesktopModuleID
+                  FROM DesktopModules
+                  WHERE ModuleName = 'C_Info'))) And Modules.ModuleId not in(select ModuleId from ModuleSettings where ModuleSettings.SettingName = 'ModuleType' And (SettingValue ='Search' OR SettingValue ='Detail' OR SettingValue ='UpInfo' OR SettingValue ='MoreList' OR SettingValue ='Spec')) AND (Modules.IsDeleted = 0) AND 
+      (Tabs.IsDeleted = 0) AND (Permission.PermissionName = 'Edit' ) AND 
+      (ModulePermission.RoleID = - 1)
+return
+end
+if @UserID = -1 and @PermissionName='View' and @IsEqual = 1
+begin
+SELECT Modules.ModuleID, Modules.ModuleTitle, Modules.PortalID, Tabs.TabName, 
+      Tabs.TabID
+FROM Permission Permission_1 INNER JOIN
+      Tabs INNER JOIN
+      TabModules ON Tabs.TabID = TabModules.TabID INNER JOIN
+      TabPermission ON Tabs.TabID = TabPermission.TabID ON 
+      Permission_1.PermissionID = TabPermission.PermissionID INNER JOIN
+      Modules ON TabModules.ModuleID = Modules.ModuleID
+WHERE (Modules.ModuleDefID =
+          (SELECT ModuleDefID
+         FROM ModuleDefinitions
+         WHERE DesktopModuleID =
+                   (SELECT TOP 1 DesktopModuleID
+                  FROM DesktopModules
+                  WHERE ModuleName = 'C_Info'))) And Modules.ModuleId not in(select ModuleId from ModuleSettings where ModuleSettings.SettingName = 'ModuleType' And (SettingValue ='Search' OR SettingValue ='Detail' OR SettingValue ='UpInfo' OR SettingValue ='MoreList' OR SettingValue ='Spec')) AND (Modules.IsDeleted = 0) AND 
+      (Tabs.IsDeleted = 0) AND (Permission_1.PermissionName = 'View Tab') AND 
+      (TabPermission.RoleID = - 1)  AND InheritViewPermissions = 1
+Union
+SELECT Modules.ModuleID, Modules.ModuleTitle, Modules.PortalID, Tabs.TabName, 
+      Tabs.TabID
+FROM Tabs INNER JOIN
+      TabModules ON Tabs.TabID = TabModules.TabID INNER JOIN
+      Modules ON TabModules.ModuleID = Modules.ModuleID INNER JOIN
+      ModulePermission INNER JOIN
+      Permission ON ModulePermission.PermissionID = Permission.PermissionID ON 
+      Modules.ModuleID = ModulePermission.ModuleID
+WHERE (Modules.ModuleDefID =
+          (SELECT ModuleDefID
+         FROM ModuleDefinitions
+         WHERE DesktopModuleID =
+                   (SELECT TOP 1 DesktopModuleID
+                  FROM DesktopModules
+                  WHERE ModuleName = 'C_Info'))) And Modules.ModuleId not in(select ModuleId from ModuleSettings where ModuleSettings.SettingName = 'ModuleType' And (SettingValue ='Search' OR SettingValue ='Detail' OR SettingValue ='UpInfo' OR SettingValue ='MoreList' OR SettingValue ='Spec')) AND (Modules.IsDeleted = 0) AND 
+      (Tabs.IsDeleted = 0) AND (Permission.PermissionName = 'View') AND 
+      (ModulePermission.RoleID = - 1)
+return
+end
+if @IsEqual = 1 and @PermissionName='Edit'
+begin
+SELECT   Modules.ModuleID, ModuleTitle, Modules.PortalID, Tabs.TabName, Tabs.TabID
+FROM Roles INNER JOIN
+      ModulePermission ON Roles.RoleID = ModulePermission.RoleID INNER JOIN
+      Permission ON 
+      ModulePermission.PermissionID = Permission.PermissionID INNER JOIN
+      UserRoles ON Roles.RoleID = UserRoles.RoleID INNER JOIN
+      Modules INNER JOIN
+      TabModules ON TabModules.ModuleID = Modules.ModuleID INNER JOIN
+      Tabs ON Tabs.TabID = TabModules.TabID ON 
+      ModulePermission.ModuleID = Modules.ModuleID
+WHERE (Modules.ModuleDefID =
+          (SELECT ModuleDefID
+         FROM ModuleDefinitions
+         WHERE DesktopModuleID =
+                   (SELECT TOP 1 DesktopModuleID
+                  FROM DesktopModules
+                  WHERE ModuleName = 'C_Info'))) And Modules.ModuleId not in(select ModuleId from ModuleSettings where ModuleSettings.SettingName = 'ModuleType' And (SettingValue ='Search' OR SettingValue ='Detail' OR SettingValue ='UpInfo' OR SettingValue ='MoreList' OR SettingValue ='Spec')) AND (Modules.IsDeleted = 0) AND 
+      (Tabs.IsDeleted = 0) AND (Permission.PermissionName = 'Edit') AND 
+      (UserRoles.UserID = @UserID)
+union
+SELECT  
+      Modules.ModuleID, Modules.ModuleTitle, Modules.PortalID, Tabs.TabName, 
+      Tabs.TabID
+FROM ModulePermission INNER JOIN
+      Permission ON 
+      ModulePermission.PermissionID = Permission.PermissionID INNER JOIN
+      Modules INNER JOIN
+      TabModules ON TabModules.ModuleID = Modules.ModuleID INNER JOIN
+      Tabs ON Tabs.TabID = TabModules.TabID ON 
+      ModulePermission.ModuleID = Modules.ModuleID
+WHERE (Modules.ModuleDefID =
+          (SELECT ModuleDefID
+         FROM ModuleDefinitions
+         WHERE DesktopModuleID =
+                   (SELECT TOP 1 DesktopModuleID
+                  FROM DesktopModules
+                  WHERE ModuleName = 'C_Info'))) And Modules.ModuleId not in(select ModuleId from ModuleSettings where ModuleSettings.SettingName = 'ModuleType' And (SettingValue ='Search' OR SettingValue ='Detail' OR SettingValue ='UpInfo' OR SettingValue ='MoreList' OR SettingValue ='Spec')) AND (Modules.IsDeleted = 0) AND 
+      (Tabs.IsDeleted = 0) AND (Permission.PermissionName = 'Edit' ) AND 
+      (ModulePermission.RoleID = - 1)
+end
+else  if @IsEqual = 1 and @PermissionName='View'
+begin
+SELECT Modules.ModuleID, Modules.ModuleTitle, Modules.PortalID, Tabs.TabName, 
+      Tabs.TabID
+FROM Permission Permission_1 INNER JOIN
+      Tabs INNER JOIN
+      TabModules ON Tabs.TabID = TabModules.TabID INNER JOIN
+      TabPermission ON Tabs.TabID = TabPermission.TabID ON 
+      Permission_1.PermissionID = TabPermission.PermissionID INNER JOIN
+      Modules ON TabModules.ModuleID = Modules.ModuleID LEFT OUTER JOIN
+      ModuleSettings ON Modules.ModuleID = ModuleSettings.ModuleID
+WHERE (Modules.ModuleDefID =
+          (SELECT ModuleDefID
+         FROM ModuleDefinitions
+         WHERE DesktopModuleID =
+                   (SELECT TOP 1 DesktopModuleID
+                  FROM DesktopModules
+                  WHERE ModuleName = 'C_Info'))) AND 
+      (ModuleSettings.SettingName IS NULL) AND (Modules.IsDeleted = 0) AND 
+      (Tabs.IsDeleted = 0) AND (Permission_1.PermissionName = 'View Tab') AND 
+      (Modules.InheritViewPermissions = 1) AND (TabPermission.RoleID = - 1) OR
+      (Modules.ModuleDefID =
+          (SELECT ModuleDefID
+         FROM ModuleDefinitions
+         WHERE DesktopModuleID =
+                   (SELECT TOP 1 DesktopModuleID
+                  FROM DesktopModules
+                  WHERE ModuleName = 'C_Info'))) AND 
+      (ModuleSettings.SettingName = 'ModuleType') AND (Modules.IsDeleted = 0) AND 
+      (Tabs.IsDeleted = 0) AND (Permission_1.PermissionName = 'View Tab') AND 
+      (Modules.InheritViewPermissions = 1) AND (ModuleSettings.SettingValue = '' OR
+      ModuleSettings.SettingValue = 'Spec' OR
+      ModuleSettings.SettingValue = 'Category')
+union
+SELECT  
+      Modules.ModuleID, Modules.ModuleTitle, Modules.PortalID, Tabs.TabName, 
+      Tabs.TabID
+FROM Permission Permission_1 INNER JOIN
+      Tabs INNER JOIN
+      TabModules ON Tabs.TabID = TabModules.TabID INNER JOIN
+      TabPermission ON Tabs.TabID = TabPermission.TabID ON 
+      Permission_1.PermissionID = TabPermission.PermissionID INNER JOIN
+      Roles Roles_1 ON TabPermission.RoleID = Roles_1.RoleID INNER JOIN
+      UserRoles UserRoles_1 ON 
+      Roles_1.RoleID = UserRoles_1.RoleID Inner JOIN
+      Modules ON TabModules.ModuleID = Modules.ModuleID
+WHERE (Modules.ModuleDefID =
+          (SELECT ModuleDefID
+         FROM ModuleDefinitions
+         WHERE DesktopModuleID =
+                   (SELECT TOP 1 DesktopModuleID
+                  FROM DesktopModules
+                  WHERE ModuleName = 'C_Info'))) And Modules.ModuleId not in(select ModuleId from ModuleSettings where ModuleSettings.SettingName = 'ModuleType' And (SettingValue ='Search' OR SettingValue ='Detail' OR SettingValue ='UpInfo' OR SettingValue ='MoreList' OR SettingValue ='Spec')) AND (Modules.IsDeleted = 0) AND 
+      (Tabs.IsDeleted = 0) AND (Permission_1.PermissionName = 'View Tab') AND InheritViewPermissions = 1 AND 
+      (UserRoles_1.UserID = @UserId)
+Union
+SELECT  
+      Modules.ModuleID, Modules.ModuleTitle, Modules.PortalID, Tabs.TabName, 
+      Tabs.TabID
+FROM Tabs INNER JOIN
+      TabModules ON Tabs.TabID = TabModules.TabID Inner Join Modules on TabModules.ModuleID = Modules.ModuleID 
+      Inner JOIN
+      Roles INNER JOIN
+      ModulePermission ON Roles.RoleID = ModulePermission.RoleID INNER JOIN
+      Permission ON 
+      ModulePermission.PermissionID = Permission.PermissionID INNER JOIN
+      UserRoles ON Roles.RoleID = UserRoles.RoleID ON 
+      Modules.ModuleID = ModulePermission.ModuleID
+WHERE (Modules.ModuleDefID =
+          (SELECT ModuleDefID
+         FROM ModuleDefinitions
+         WHERE DesktopModuleID =
+                   (SELECT TOP 1 DesktopModuleID
+                  FROM DesktopModules
+                  WHERE ModuleName = 'C_Info'))) And Modules.ModuleId not in(select ModuleId from ModuleSettings where ModuleSettings.SettingName = 'ModuleType' And (SettingValue ='Search' OR SettingValue ='Detail' OR SettingValue ='UpInfo' OR SettingValue ='MoreList' OR SettingValue ='Spec')) AND (Modules.IsDeleted = 0) AND 
+      (Tabs.IsDeleted = 0) AND (Permission.PermissionName = 'View') AND 
+      (UserRoles.UserID = @UserId) 
+end
+else if @PermissionName='Edit'
+begin
+SELECT DISTINCT 
+      Modules.ModuleID, Modules.ModuleTitle, Modules.PortalID, Tabs.TabName, 
+      Tabs.TabID
+FROM Modules INNER JOIN
+      TabModules ON TabModules.ModuleID = Modules.ModuleID INNER JOIN
+      Tabs ON Tabs.TabID = TabModules.TabID INNER JOIN
+      ModulePermission ON 
+      Modules.ModuleID = ModulePermission.ModuleID INNER JOIN
+      Permission ON ModulePermission.PermissionID = Permission.PermissionID
+WHERE (Modules.InheritViewPermissions = 0) AND (Tabs.IsDeleted = 0) AND 
+      (Modules.IsDeleted = 0) AND (Modules.ModuleDefID =
+          (SELECT ModuleDefID
+         FROM ModuleDefinitions
+         WHERE DesktopModuleID =
+                   (SELECT TOP 1 DesktopModuleID
+                  FROM DesktopModules
+                  WHERE ModuleName = 'C_Info'))) AND 
+      (Modules.ModuleID NOT IN
+          (SELECT ModuleId
+         FROM ModuleSettings
+         WHERE ModuleSettings.SettingName = 'ModuleType' AND 
+               (SettingValue = 'Search' OR
+               SettingValue = 'Detail' OR
+               SettingValue = 'UpInfo' OR
+               SettingValue = 'MoreList' OR
+               SettingValue = 'Spec'))) AND (Modules.InheritViewPermissions = 0) AND 
+      (ModulePermission.RoleID <> - 1)AND 
+      (Permission.PermissionName = 'VIEW') AND (Modules.ModuleID NOT IN
+          (SELECT Modules.ModuleID
+         FROM ModulePermission INNER JOIN
+               UserRoles ON ModulePermission.RoleID = UserRoles.RoleID INNER JOIN
+               Modules ON ModulePermission.ModuleID = Modules.ModuleID INNER JOIN
+               Permission ON 
+               ModulePermission.PermissionID = Permission.PermissionID
+         WHERE (UserRoles.UserID = @UserId) AND (Modules.InheritViewPermissions = 0) AND 
+               (Permission.PermissionName = 'Edit'))) AND (Modules.ModuleID NOT IN
+       (SELECT Modules.ModuleID
+FROM Modules INNER JOIN
+      ModulePermission ON 
+      Modules.ModuleID = ModulePermission.ModuleID INNER JOIN
+      Permission ON ModulePermission.PermissionID = Permission.PermissionID
+WHERE (Modules.InheritViewPermissions = 0) AND (ModulePermission.RoleID = - 1) AND 
+      (Permission.PermissionName = 'Edit')))
+end
+else
+begin
+SELECT DISTINCT 
+      Modules.ModuleID, Modules.ModuleTitle, Modules.PortalID, Tabs.TabName, 
+      Tabs.TabID
+FROM Modules INNER JOIN
+      TabModules ON TabModules.ModuleID = Modules.ModuleID INNER JOIN
+      Tabs ON Tabs.TabID = TabModules.TabID INNER JOIN
+      ModulePermission ON 
+      Modules.ModuleID = ModulePermission.ModuleID INNER JOIN
+      Permission ON ModulePermission.PermissionID = Permission.PermissionID
+WHERE (Modules.InheritViewPermissions = 0) AND (Tabs.IsDeleted = 0) AND 
+      (Modules.IsDeleted = 0) AND (Modules.ModuleDefID =
+          (SELECT ModuleDefID
+         FROM ModuleDefinitions
+         WHERE DesktopModuleID =
+                   (SELECT TOP 1 DesktopModuleID
+                  FROM DesktopModules
+                  WHERE ModuleName = 'C_Info'))) AND 
+      (Modules.ModuleID NOT IN
+          (SELECT ModuleId
+         FROM ModuleSettings
+         WHERE ModuleSettings.SettingName = 'ModuleType' AND 
+               (SettingValue = 'Search' OR
+               SettingValue = 'Detail' OR
+               SettingValue = 'UpInfo' OR
+               SettingValue = 'MoreList' OR
+               SettingValue = 'Spec'))) AND (Modules.InheritViewPermissions = 0) AND 
+      (ModulePermission.RoleID <> - 1)AND 
+      (Permission.PermissionName = 'VIEW') AND (Modules.ModuleID NOT IN
+          (SELECT Modules.ModuleID
+         FROM ModulePermission INNER JOIN
+               UserRoles ON ModulePermission.RoleID = UserRoles.RoleID INNER JOIN
+               Modules ON ModulePermission.ModuleID = Modules.ModuleID INNER JOIN
+               Permission ON 
+               ModulePermission.PermissionID = Permission.PermissionID
+         WHERE (UserRoles.UserID = @UserId) AND (Modules.InheritViewPermissions = 0) AND 
+               (Permission.PermissionName = 'View'))) AND (Modules.ModuleID NOT IN
+       (SELECT Modules.ModuleID
+FROM Modules INNER JOIN
+      ModulePermission ON 
+      Modules.ModuleID = ModulePermission.ModuleID INNER JOIN
+      Permission ON ModulePermission.PermissionID = Permission.PermissionID
+WHERE (Modules.InheritViewPermissions = 0) AND (ModulePermission.RoleID = - 1) AND 
+      (Permission.PermissionName = 'View')))
+union
+SELECT DISTINCT 
+      Modules.ModuleID, Modules.ModuleTitle, Modules.PortalID, Tabs.TabName, 
+      Tabs.TabID
+FROM TabPermission INNER JOIN
+      Permission ON TabPermission.PermissionID = Permission.PermissionID INNER JOIN
+      Modules INNER JOIN
+      TabModules ON TabModules.ModuleID = Modules.ModuleID INNER JOIN
+      Tabs ON Tabs.TabID = TabModules.TabID ON 
+      TabPermission.TabID = Tabs.TabID
+WHERE (Modules.InheritViewPermissions = 1) AND (Tabs.IsDeleted = 0) AND 
+      (Modules.IsDeleted = 0) AND (Modules.ModuleDefID =
+          (SELECT ModuleDefID
+         FROM ModuleDefinitions
+         WHERE DesktopModuleID =
+                   (SELECT TOP 1 DesktopModuleID
+                  FROM DesktopModules
+                  WHERE ModuleName = 'C_Info'))) AND 
+      (Modules.ModuleID NOT IN
+          (SELECT ModuleId
+         FROM ModuleSettings
+         WHERE ModuleSettings.SettingName = 'ModuleType' AND 
+               (SettingValue = 'Search' OR
+               SettingValue = 'Detail' OR
+               SettingValue = 'UpInfo' OR
+               SettingValue = 'MoreList' OR
+               SettingValue = 'Spec'))) AND (Permission.PermissionName = 'View Tab') AND 
+      (TabPermission.RoleID <> - 1) AND (Modules.ModuleID NOT IN
+          (SELECT Modules.ModuleID
+         FROM Permission INNER JOIN
+               TabPermission ON 
+               Permission.PermissionID = TabPermission.PermissionID INNER JOIN
+               TabModules INNER JOIN
+               Modules ON TabModules.ModuleID = Modules.ModuleID ON 
+               TabPermission.TabID = TabModules.TabID INNER JOIN
+               UserRoles ON TabPermission.RoleID = UserRoles.RoleID
+         WHERE (Modules.InheritViewPermissions = 1) AND 
+               (Permission.PermissionName = 'View Tab') AND (UserRoles.UserID = @UserId))) 
+      AND (Modules.ModuleID NOT IN
+          (SELECT DISTINCT Modules.ModuleID
+         FROM TabPermission INNER JOIN
+               Permission ON 
+               TabPermission.PermissionID = Permission.PermissionID INNER JOIN
+               Modules INNER JOIN
+               TabModules ON TabModules.ModuleID = Modules.ModuleID ON 
+               TabPermission.TabID = TabModules.TabID
+         WHERE (Modules.InheritViewPermissions = 1) AND 
+               (Permission.PermissionName = 'View Tab') AND (Modules.IsDeleted = 0) AND 
+               (Modules.ModuleDefID =
+                   (SELECT ModuleDefID
+                  FROM ModuleDefinitions
+                  WHERE DesktopModuleID =
+                            (SELECT TOP 1 DesktopModuleID
+                           FROM DesktopModules
+                           WHERE ModuleName = 'C_Info'))) AND 
+               (TabPermission.RoleID = - 1)))
+end
+GO
+
+CREATE PROCEDURE C_Info_CopyInfo
+@InfoId int,
+@toModuleIds varchar(200)
+ AS
+declare @wfId int
+declare @ApproveStatus int
+declare @newInfoId int
+set @wfId = -1
+set @ApproveStatus = 1
+
+if charindex(',',@toModuleIds) > 0
+begin
+
+	declare @newModuleId varchar(20)
+	declare @nStartIndex int
+	declare @nCommaIndex int
+	set @nStartIndex = 1
+	set @nCommaIndex = charindex(',',@toModuleIds)
+	
+	while @nCommaIndex > 0
+	begin
+		set @newModuleId = SubString(@toModuleIds,@nStartIndex,@nCommaIndex - @nStartIndex)
+		
+		SELECT @wfId=SettingValue
+		FROM ModuleSettings
+		WHERE (SettingName = N'WfId') AND (ModuleID = @newModuleId)
+		
+		if @wfId > 0
+		begin
+		set @ApproveStatus = 0
+		end
+		
+		--copy basic info only
+		INSERT INTO C_info
+		      (ModuleID, CreatedByUser, CreateDate, SortDate, Title, Description, Content, Source, 
+		      KeyWords, SetOrder, IsExtURL, ExtURL, [Level], Author, Image, 
+		      ImagePosition, ImageSize, ExpireDate, AttachFile, Email, URL, Doc1, Doc2, Doc3, 
+		      Doc4, Doc5, Doc6, Doc7, Doc8, Syndicate, Recommend, TitleStyle, ApproveStatus)
+		SELECT @newModuleId, CreatedByUser, CreateDate, GETDATE() AS SortDate, Title, Description, 
+		      Content, Source, KeyWords, SetOrder, IsExtURL, ExtURL, [Level], Author, 
+		      Image, ImagePosition, ImageSize, ExpireDate, AttachFile, Email, URL, Doc1, Doc2, 
+		      Doc3, Doc4, Doc5, Doc6, Doc7, Doc8, Syndicate, Recommend, TitleStyle, 
+		      @ApproveStatus
+		FROM C_info
+		WHERE (InfoID = @InfoId)
+		
+		set @nStartIndex = @nCommaIndex + 1
+		set @nCommaIndex = charindex(',',@toModuleIds,@nStartIndex)
+ 	end
+end
+else
+begin
+
+	SELECT @wfId=SettingValue
+	FROM ModuleSettings
+	WHERE (SettingName = N'WfId') AND (ModuleID = @ToModuleIds)
+	
+	if @wfId > 0
+	begin
+	set @ApproveStatus = 0
+	end
+	
+	INSERT INTO C_info
+	      (ModuleID, CreatedByUser, CreateDate, SortDate, Title, Description, Content, Source, 
+	      KeyWords, SetOrder, IsExtURL, ExtURL, [Level], Author, Image, 
+	      ImagePosition, ImageSize, ExpireDate, AttachFile, Email, URL, Doc1, Doc2, Doc3, 
+	      Doc4, Doc5, Doc6, Doc7, Doc8, Syndicate, Recommend, TitleStyle, ApproveStatus)
+	SELECT @ToModuleIds, CreatedByUser, CreateDate, GETDATE() AS SortDate, Title, Description, 
+	      Content, Source, KeyWords, SetOrder, IsExtURL, ExtURL, [Level], Author, 
+	      Image, ImagePosition, ImageSize, ExpireDate, AttachFile, Email, URL, Doc1, Doc2, 
+	      Doc3, Doc4, Doc5, Doc6, Doc7, Doc8, Syndicate, Recommend, TitleStyle, 
+	      @ApproveStatus
+	FROM C_info
+	WHERE (InfoID = @InfoId)
+
+end
+--select Scope_Identity()
+
+GO
+
+/*CREATE PROCEDURE C_Info_GetTabByModuleId
+@ModuleId int
+ AS
+SELECT Tabs.*
+FROM Modules INNER JOIN
+      TabModules ON Modules.ModuleID = TabModules.ModuleID INNER JOIN
+      Tabs ON TabModules.TabID = Tabs.TabID
+WHERE (Modules.ModuleID =  @ModuleId)
+GO
+
+alter    PROCEDURE C_info_GetSingleInfo
+    @InfoID int
+AS
+    SELECT C_Info.* ,Modules.ModuleTitle
+FROM C_Info inner join Modules on C_Info.ModuleId = Modules.ModuleId
+ WHERE InfoID=@InfoID
+GO
+*/
+
+alter          PROCEDURE C_info_GetStatistic
+    @PortalId   int,
+    @StatType int,
+    @StartDate  datetime = null,
+    @EndDate    datetime = null
+AS
+CREATE TABLE #C_InfoPortalModule(ModuleID INT)
+insert into #C_InfoPortalModule
+	select distinct ModuleID FROM C_Info Where ModuleID In
+	 (select ModuleID FROM TabModules where TabID IN(Select TabID FROM Tabs Where PortalID=@PortalID))
+
+if @StartDate is null
+ select @StartDate = min(CreateDate) from C_Info where ModuleID IN (select ModuleID from #C_InfoPortalModule)
+if @EndDate is null
+select @EndDate = max(CreateDate) from C_Info where ModuleID IN (select ModuleID from #C_InfoPortalModule)
+
+if @StatType=0 or @StatType=1 or @StatType=2--// the stat for publish count
+begin
+   
+	Declare @Nums as int
+   	if @StatType=0 --stat for module
+	begin
+		Create Table #TableModuleStat(ModuleName nvarchar(100),InfoCount int)
+		DECLARE @ModuleID int
+		DECLARE Module_Cursor CURSOR FOR
+		SELECT ModuleID FROM #C_InfoPortalModule
+		OPEN Module_Cursor
+		FETCH NEXT FROM Module_Cursor into @ModuleID
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+	   		Declare @ModuleName nvarchar(100)
+			Select @ModuleName=ModuleTitle FROM Modules Where ModuleID=@ModuleID
+			Select @Nums=COUNT(InfoID) FROM C_Info Where ModuleID=@ModuleID
+				AND CreateDate Between @StartDate AND @EndDate
+			Insert INTO #TableModuleStat Values(@ModuleName,@Nums)
+	   	FETCH NEXT FROM Module_Cursor into @ModuleID
+		END
+		SELECT * FROM #TableModuleStat Order By InfoCount desc
+		CLOSE Module_Cursor
+		DEALLOCATE Module_Cursor
+	end
+	if @StatType=1 --stat for tab
+	begin
+		Create Table #TableTabStat(TabName nvarchar(100),InfoCount int)
+		DECLARE @TabID int
+		DECLARE Tab_Cursor CURSOR FOR
+		SELECT DISTINCT TabID FROM TabModules Where ModuleID IN (Select ModuleID FROM #C_InfoPortalModule)
+		OPEN Tab_Cursor
+		FETCH NEXT FROM Tab_Cursor into @TabID
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+	   		Declare @TabName nvarchar(100)
+			Select @TabName=TabName FROM Tabs Where TabID=@TabID
+			
+			Select @Nums=COUNT(InfoID) FROM C_Info Where 
+				ModuleID IN(SELECT ModuleID FROM TabModules WHERE TabID=@TabID)
+				AND CreateDate Between @StartDate AND @EndDate
+			Insert INTO #TableTabStat Values(@TabName,@Nums)
+	   	FETCH NEXT FROM Tab_Cursor into @TabID
+		END
+		SELECT * FROM #TableTabStat Order By InfoCount desc
+		CLOSE Tab_Cursor
+		DEALLOCATE Tab_Cursor
+	end
+	if @StatType=2 --stat for site
+	begin
+		Create Table #TablePortalStat(SiteName nvarchar(100),InfoCount int)
+		DECLARE @PortalID1 int
+		DECLARE Portal_Cursor CURSOR FOR
+		SELECT DISTINCT PortalID FROM Tabs WHERE TabID IN 
+			(SELECT TabID FROM TabModules Where ModuleID IN (Select ModuleID FROM #C_InfoPortalModule))
+		OPEN Portal_Cursor
+		FETCH NEXT FROM Portal_Cursor into @PortalID1
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+	   		Declare @PortalName nvarchar(100)
+			Select @PortalName=PortalName FROM Portals Where PortalID=@PortalID1
+			Select @Nums=COUNT(InfoID) FROM C_Info Where
+				ModuleID IN(SELECT ModuleID FROM TabModules WHERE 
+				TabID IN (SELECT TabID FROM Tabs WHERE PortalID=@PortalID1))
+				AND CreateDate Between @StartDate AND @EndDate
+			Insert INTO #TablePortalStat Values(@PortalName,@Nums)
+	   	FETCH NEXT FROM Portal_Cursor into @PortalID1
+		END
+		SELECT * FROM #TablePortalStat Order By InfoCount desc
+		CLOSE Portal_Cursor
+		DEALLOCATE Portal_Cursor
+	end
+end
+if @StatType=3  --stat for member
+begin
+	select 'PublicUser'=Users.FirstName + Users.LastName,InfoCount=count(*) FROM C_Info Inner join #C_InfoPortalModule on C_Info.ModuleId=#C_InfoPortalModule.ModuleId
+		inner join Users on C_Info.CreatedByUser = Users.UserId
+		where C_Info.CreateDate between @StartDate and @EndDate
+		GROUP BY Users.FirstName + Users.LastName
+		order by InfoCount desc
+end
+if @StatType=4  --stat for member role
+begin
+	SELECT Roles.RoleName, COUNT(*) AS InfoCount
+	FROM Roles INNER JOIN
+	      UserRoles ON Roles.RoleID = UserRoles.RoleID INNER JOIN
+	      C_info ON UserRoles.UserID = C_info.CreatedByUser
+	WHERE (C_info.CreateDate BETWEEN @StartDate AND @EndDate)
+	GROUP BY Roles.RoleName
+	UNION
+	SELECT
+	      CASE WHEN Users.IssuperUser = 1 THEN 'Super User' WHEN createdByUser = - 1 THEN
+	       'Registered Users' END AS RoleName , COUNT(*) AS InfoCount
+	FROM C_Info Inner join #C_InfoPortalModule on C_Info.ModuleId=#C_InfoPortalModule.ModuleId LEFT JOIN
+	      Users ON CreatedByUser = UserId
+	WHERE IsSuperUser = 1 OR
+	      CreatedByUser = - 1 AND (C_info.CreateDate BETWEEN @StartDate AND 
+	      @EndDate)
+	GROUP BY IsSuperUser, CreatedByUser
+	ORDER BY InfoCount DESC
+end
+if @StatType=5
+begin
+	select 'SpecName'=C_InfoSpec.Name,InfoCount=count(*) FROM C_Info
+		inner join C_InfoSpecInfo on C_InfoSpecInfo.InfoID=C_Info.InfoID
+		inner join C_InfoSpec on C_InfoSpec.SpecID=C_InfoSpecInfo.SpecID
+		Group by C_InfoSpec.Name,C_InfoSpec.SpecID
+		order by InfoCount desc
+end
+if @StatType=6  --stat for click count
+begin
+		Create Table #TableModuleClick(ModuleName nvarchar(100),AllClickCount int,ThisWeekClickCount int,ThisMonthClickCount int,ThisYearClickCount int)
+		DECLARE @ClickModuleID int
+		DECLARE Click_Cursor CURSOR FOR
+		SELECT ModuleID FROM #C_InfoPortalModule
+		OPEN Click_Cursor
+		FETCH NEXT FROM Click_Cursor into @ClickModuleID
+		WHILE @@FETCH_STATUS = 0
+		BEGIN
+	   		Declare @ClickModuleName nvarchar(100)
+			Select @ClickModuleName=ModuleTitle FROM Modules Where ModuleID=@ClickModuleID
+			Declare @CurrentWeekClicks int
+			select @CurrentWeekClicks=sum(Hits) From C_Info where ModuleID=@ClickModuleID
+				 And CreateDate between DATEADD(Week,-1,getdate()) And GetDate()
+			Declare @CurrentMonthClicks int
+			select @CurrentMonthClicks=sum(Hits) From C_Info where ModuleID=@ClickModuleID
+				 And CreateDate between DATEADD(Month,-1,getdate()) And GetDate()
+			Declare @CurrentYearClicks int
+			select @CurrentYearClicks=sum(Hits) From C_Info where ModuleID=@ClickModuleID
+				 And CreateDate between DATEADD(Year,-1,getdate()) And GetDate()
+			Declare @AllClicks int
+			select @AllClicks=sum(Hits) From C_Info where ModuleID=@ClickModuleID
+			Insert Into #TableModuleClick Values(@ClickModuleName,@AllClicks,@CurrentWeekClicks,@CurrentMonthClicks,@CurrentYearClicks)
+	   	FETCH NEXT FROM Click_Cursor into @ClickModuleID
+		END
+		SELECT * FROM #TableModuleClick Order By AllClickCount desc
+		CLOSE Click_Cursor
+		DEALLOCATE Click_Cursor
+end
+
+--C_info_GetStatistic 0,1,'2003-1-1','2005-6-6'
+GO
+
+alter   PROCEDURE C_infoWorkFlowAddTrace
+    @ProcessID nvarchar(20),
+    @ItemID int,
+    @wfStatus int,
+    @Description nvarchar(250),
+    @Remark nvarchar(250),
+    @ActiveID int,
+    @UserID int
+AS
+    insert into wfTrace(ProcessID,ItemID,wfStatus,Description,Remark,ActiveID,UserID)
+values(@ProcessID,@ItemID,@wfStatus,@Description,@Remark,@ActiveID,@UserID)
+--judge the audit! if it is the last then update the ApproveStatus at the c_info table
+if @wfStatus=1
+begin
+declare @MaxActiveID int
+declare @wfID int
+select @wfID=wfID from wfActive where ActiveID=@ActiveID
+select @MaxActiveID=ActiveID from wfActive where wfID=@wfID and StepNum=(select Max(StepNum) from wfActive where wfID=@wfID)
+
+if @MaxActiveID=@ActiveID
+	begin
+		update C_Info set ApproveStatus=1 where InfoID=@ItemID
+		select 1
+	end
+else
+	begin
+		select  0
+	end
+end
+else if @wfStatus=2
+begin
+	update C_Info set ApproveStatus=1 where InfoID=@ItemID
+	select 1
+end
+GO
+
+alter            PROCEDURE C_info_AddWorkFlowActive
+    @ActiveName nvarchar(100),
+    @StepNum int,
+    @Action nvarchar(50),
+    @wfID nvarchar(200),
+    @Description nvarchar(100),
+    @ActionUser nvarchar(100),
+    @RejectActiveID int,
+    @ActionType int,
+    @PortalId int
+AS
+declare @intStepNum int
+select @intStepNum=isnull(max(StepNum),0) +1 from wfActive where wfID=@wfID
+declare @ActionUserOrRoleID int
+if @ActionType=0
+select @ActionUserOrRoleID=UserID from Users where UserName=@ActionUser
+if @ActionType=1
+select @ActionUserOrRoleID=RoleID from Roles where RoleName=@ActionUser and PortalId=@PortalId
+    insert into wfActive(ActiveName,StepNum,Action,wfID,Description,ActionUser,RejectActiveID,ActionType) Values
+(@ActiveName,@intStepNum,@Action,@wfID,@Description,@ActionUserOrRoleID,@RejectActiveID,@ActionType)
+Go
+
+alter     PROCEDURE C_info_UpdateWorkFlowActive
+    @ActiveID int,
+    @Action nvarchar(50),
+    @ActiveName nvarchar(100),
+    @Description nvarchar(200),
+    @ActionUser nvarchar(50),
+    @RejectActiveID int,
+    @ActionType int,
+    @PortalId int
+AS
+declare @ActionUserOrRoleID int
+if @ActionType=0
+select @ActionUserOrRoleID=UserID from Users where UserName=@ActionUser
+if @ActionType=1
+select @ActionUserOrRoleID=RoleID from Roles where RoleName=@ActionUser and PortalId=@PortalId
+    update wfActive set ActiveName=@ActiveName,Action=@Action,Description=@Description,ActionUser=@ActionUserOrRoleID,
+RejectActiveID=@RejectActiveID,ActionType=@ActionType
+ where ActiveID=@ActiveID
+
+GO
+
+Create  procedure C_Info_GetWorkFlowNextApproverID 
+    @WfID int,
+    @ItemID int
+as
+declare @CreateUserID int
+declare @ApproveStatus int
+declare @NextUserID int
+set @ApproveStatus = 0
+begin
+    --this judge the article if has pass! if pass then return 1
+    --it is possible this module change workflow ! how can i  now? need this article need audit again?
+   select @CreateUserID=CreatedByUser, @ApproveStatus=ApproveStatus from C_Info where InfoID=@ItemID
+    if(@ApproveStatus)=1
+begin
+	select -1
+	return
+end
+    Declare @wfTraceID int
+    declare @ActionUser int
+    Declare @ActiveID int
+    declare @ActionType int
+    set @ActionType=0
+    set @ActiveID=-1
+    select @wfTraceID=max(wftraceID) from wftrace where ActiveID in
+	(select activeid from wfActive where WfID=@WfID) and itemid=@ItemID
+    if @wfTraceID is null
+    --?not start then audit first user or role
+    begin
+	--?get the firest workflow
+	select @ActionUser=ActionUser,@ActiveID=ActiveID,@ActionType=ActionType from wfActive where wfid=@wfid and stepnum=1
+    end
+    else
+    begin
+	declare @wfStatus int
+	select @wfStatus=wfStatus,@ActiveID=ActiveID from wfTrace where wfTraceID=@wfTraceID
+	if @wfStatus=0
+	--?reject
+	begin
+		declare @RejectActiveID int
+		select @RejectActiveID=RejectActiveID from wfActive where ActiveID=@ActiveID
+		select @ActionUser=ActionUser,@ActiveID=ActiveID,@ActionType=ActionType from wfActive where ActiveID=@RejectActiveID
+	end
+	else
+	begin
+		if @wfStatus=1
+		--agree
+		declare @StepNum int
+		select @StepNum=StepNum from wfActive where ActiveID=@ActiveID
+		select @ActionUser=ActionUser,@ActiveID=ActiveID,@ActionType=ActionType from wfActive 
+where wfid=@wfid and StepNum=(select Min(StepNum) from wfActive where StepNum>@StepNum And wfID=@wfID)
+		
+	end
+    end
+      if @ActionUser=-1
+	-- -1 audit by the document creater
+	begin
+		select * from users where Userid= @CreateUserID	
+	end
+    else
+        if @ActionType=0 ---user
+	   begin
+		select * from users where Userid= @ActionUser
+	   end
+        else            ----audit by role
+           begin
+              SELECT Users.* FROM Users INNER JOIN
+      UserRoles ON Users.UserID = UserRoles.UserID Where RoleID=@ActionUser           
+           end  
+end
+GO
+
+alter function dbo.C_Info_WorkFlowCanAudit (
+    @WfID int,
+    @ItemID int,
+    @UserID int,
+    @CreateUserID int)
+returns int --  -1 can not modify >0 can modify and return workflowid
+as
+begin
+    --this judge the article if has pass! if pass then return 1
+    --it is possible this module change workflow ! how can i  now? need this article need audit again?
+    if(select ApproveStatus from C_Info where InfoID=@ItemID)=1
+	return -1
+    Declare @wfTraceID int
+    declare @ActionUser int
+    Declare @ActiveID int
+    declare @ActionType int
+    set @ActionType=0
+    set @ActiveID=-1
+    select @wfTraceID=max(wftraceID) from wftrace where ActiveID in
+	(select activeid from wfActive where WfID=@WfID) and itemid=@ItemID
+    if @wfTraceID is null
+    --?not start then audit first user or role
+    begin
+	--?get the firest workflow
+	select @ActionUser=ActionUser,@ActiveID=ActiveID,@ActionType=ActionType from wfActive where wfid=@wfid and stepnum=1
+    end
+    else
+    begin
+	declare @wfStatus int
+	declare @wfDescription varchar(20)
+	select @wfStatus=wfStatus,@ActiveID=ActiveID, @wfDescription=[Description] from wfTrace where wfTraceID=@wfTraceID
+	if @wfDescription='jump' and @wfStatus=0
+	begin
+		select @ActionUser=ActionUser,@ActiveID=ActiveID,@ActionType=ActionType from wfActive where ActiveID=@ActiveID
+	end
+	else
+	begin
+		if @wfStatus=0
+		--?reject
+		begin
+			declare @RejectActiveID int
+			select @RejectActiveID=RejectActiveID from wfActive where ActiveID=@ActiveID
+			select @ActionUser=ActionUser,@ActiveID=ActiveID,@ActionType=ActionType from wfActive where ActiveID=@RejectActiveID
+		end
+		else
+		begin
+			if @wfStatus=1
+			--agree
+			declare @StepNum int
+			select @StepNum=StepNum from wfActive where ActiveID=@ActiveID
+			select @ActionUser=ActionUser,@ActiveID=ActiveID,@ActionType=ActionType from wfActive 
+	where wfid=@wfid and StepNum=(select Min(StepNum) from wfActive where StepNum>@StepNum And wfID=@wfID)
+			
+		end
+	end
+    end
+    declare @Result int
+    set @Result=-1
+    if @ActionUser=-1
+	-- -1 audit by the document creater
+	begin
+		if @UserID=@CreateUserID
+			set @Result=@ActiveID
+	end
+    else
+        if @ActionType=0 ---user
+	   begin
+		if @ActionUser=@UserID
+			set @Result=@ActiveID
+	   end
+        else            ----audit by role
+           begin
+                if exists (select UserRoleID From UserRoles where UserID=@UserID and RoleID=@ActionUser)
+			set @Result=@ActiveID
+           end
+        
+    return @Result
+--select dbo.C_Info_WorkFlowCanAudit(14,24,9,2)
+end
+GO
+INSERT INTO EventLogTypes
+      (LogTypeKey, LogTypeFriendlyName, LogTypeDescription, LogTypeOwner, 
+      LogTypeCSSClass)
+VALUES ('CMS_ITEMCREATED', 'CMS Item Created', '', 'EasySite.Logging.EventLogType', 'ItemCreated')
+GO
+
+INSERT INTO EventLogTypes
+      (LogTypeKey, LogTypeFriendlyName, LogTypeDescription, LogTypeOwner, 
+      LogTypeCSSClass)
+VALUES ('CMS_ITEMDELETED', 'CMS Item Deleted', '', 'EasySite.Logging.EventLogType', 'ItemDeleted')
+GO
+
+INSERT INTO EventLogTypes
+      (LogTypeKey, LogTypeFriendlyName, LogTypeDescription, LogTypeOwner, 
+      LogTypeCSSClass)
+VALUES ('CMS_ITEMUPDATED', 'CMS Item Updated', '', 'EasySite.Logging.EventLogType', 'ItemUpdated')
+GO
+
+INSERT INTO EventLogTypes
+      (LogTypeKey, LogTypeFriendlyName, LogTypeDescription, LogTypeOwner, 
+      LogTypeCSSClass)
+VALUES ('CMS_ITEMAPPROVED', 'CMS Item Approved', '', 'EasySite.Logging.EventLogType', 'OperationSuccess')
+Go
+
+INSERT INTO EventLogTypes
+      (LogTypeKey, LogTypeFriendlyName, LogTypeDescription, LogTypeOwner, 
+      LogTypeCSSClass)
+VALUES ('CMS_ITEMREJECTED', 'CMS Item Rejected', '', 'EasySite.Logging.EventLogType', 'OperationSuccess')
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+

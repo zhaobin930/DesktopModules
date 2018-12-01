@@ -1,0 +1,564 @@
+﻿/*
+This version is modified by tph,2010-11
+*/
+ALTER TABLE dbo.C_info ADD
+	CheckoutUserID int NULL,
+	PubDate datetime NULL
+GO
+
+ALTER   PROCEDURE C_info_INSERT
+    @ModuleID int,
+    @CreatedByUser int,
+    @CreateDate datetime,
+    @SortDate datetime,
+    @Title nvarchar(200),
+    @ShortTitle nvarchar(100),
+    @Description nvarchar(2000),
+    @Content ntext,
+    @Source nvarchar(100),
+    @KeyWords nvarchar(150),
+    @IsExtURL bit,
+    @ExtURL nvarchar(150),
+    @CategoryID int,
+    @Author nvarchar(150),
+    @Image nvarchar(200),
+    @ImagePosition nvarchar(10),
+    @ImageSize nvarchar(50),
+    @ExpireDate datetime,
+    @PubDate datetime,
+    @AttachFile nvarchar(250),
+    @Doc1 nvarchar(250),
+    @Doc2 nvarchar(250),
+    @Doc3 nvarchar(250),
+    @Doc4 nvarchar(250),
+    @Doc5 nvarchar(1000),
+    @Doc6 nvarchar(1000),
+    @Doc7 nvarchar(1000),
+    @Doc8 nvarchar(1000),
+    @Syndicate bit,
+    @SortTop bit,
+    @Recommend bit,
+    @TitleStyle nvarchar(200),
+    @ApproveStatus int,
+    @InfoGuid uniqueidentifier
+AS
+INSERT INTO [C_info] (
+    ModuleID,
+    CreatedByUser,
+    CreateDate,
+    SortDate,
+    Title,
+    ShortTitle,
+    Description,
+    Content,
+    Source,
+    KeyWords,
+    IsExtURL,
+    ExtURL,
+    CategoryID,
+    Author,
+    Image,
+    ImagePosition,
+    ImageSize,
+    ExpireDate,
+    PubDate,
+    AttachFile,
+    Doc1,
+    Doc2,
+    Doc3,
+    Doc4,
+    Doc5,
+    Doc6,
+    Doc7,
+    Doc8,
+    Syndicate,
+    SortTop,
+    Recommend,
+    TitleStyle,
+    ApproveStatus,
+    InfoGuid
+    )
+VALUES (
+    @ModuleID,
+    @CreatedByUser,
+    @CreateDate,
+    @SortDate,
+    @Title,
+    @ShortTitle,
+    @Description,
+    @Content,
+    @Source,
+    @KeyWords,
+    @IsExtURL,
+    @ExtURL,
+    @CategoryID,
+    @Author,
+    @Image,
+    @ImagePosition,
+    @ImageSize,
+    @ExpireDate,
+    @PubDate,
+    @AttachFile,
+    @Doc1,
+    @Doc2,
+    @Doc3,
+    @Doc4,
+    @Doc5,
+    @Doc6,
+    @Doc7,
+    @Doc8,
+    @Syndicate,
+    @SortTop,
+    @Recommend,
+    @TitleStyle,
+    @ApproveStatus,
+    @InfoGuid
+    )
+
+
+ SELECT @@IDENTITY
+GO
+
+alter    PROCEDURE C_info_UPDATE
+    @InfoID int,
+    @SortDate datetime,
+    @Title nvarchar(200),
+    @ShortTitle nvarchar(100),
+    @Description nvarchar(2000),
+    @Content ntext,
+    @Source nvarchar(100),
+    @KeyWords nvarchar(150),
+    @IsExtURL bit,
+    @ExtURL nvarchar(150),
+    @CategoryID int,
+    @Author nvarchar(150),
+    @Image nvarchar(200),
+    @ImagePosition nvarchar(10),
+    @ImageSize nvarchar(50),
+    @ExpireDate datetime,
+    @PubDate datetime,
+    @AttachFile nvarchar(250),
+    @Doc1 nvarchar(250),
+    @Doc2 nvarchar(250),
+    @Doc3 nvarchar(250),
+    @Doc4 nvarchar(250),
+    @Doc5 nvarchar(1000),
+    @Doc6 nvarchar(1000),
+    @Doc7 nvarchar(1000),
+    @Doc8 nvarchar(1000),
+    @Syndicate bit,
+    @SortTop bit,
+    @Recommend bit,
+    @TitleStyle nvarchar(200),
+    @ApproveStatus int,
+    @CreateDate datetime
+AS
+UPDATE [C_info]
+SET
+    SortDate = @SortDate,
+    Title = @Title,
+    ShortTitle=@ShortTitle,
+    Description = @Description,
+    Content = @Content,
+    Source = @Source,
+    KeyWords = @KeyWords,
+    IsExtURL = @IsExtURL,
+    ExtURL = @ExtURL,
+    CategoryID = @CategoryID,
+    Author = @Author,
+    Image = @Image,
+    ImagePosition = @ImagePosition,
+    ImageSize = @ImageSize,
+    ExpireDate = @ExpireDate,
+    PubDate = @PubDate,
+    AttachFile = @AttachFile,
+    Doc1 = @Doc1,
+    Doc2 = @Doc2,
+    Doc3 = @Doc3,
+    Doc4 = @Doc4,
+    Doc5 = @Doc5,
+    Doc6 = @Doc6,
+    Doc7 = @Doc7,
+    Doc8 = @Doc8,
+    Syndicate = @Syndicate,
+    SortTop = @SortTop,
+    Recommend = @Recommend,
+    TitleStyle = @TitleStyle,
+    ApproveStatus = @ApproveStatus,
+    CreateDate = @CreateDate
+WHERE InfoID=@InfoID
+GO
+
+CREATE PROCEDURE C_Info_GetScheduleProcessInfos 
+	@ScheduleId int = 0
+AS
+BEGIN
+	SET NOCOUNT ON;
+	declare @thisprocesstime datetime
+	declare @lasteprocesstime datetime
+	select @thisprocesstime = max(startdate) from ScheduleHistory where ScheduleID=@ScheduleId
+	set rowcount 1
+	select @lasteprocesstime = startdate from ScheduleHistory where ScheduleID=@ScheduleId and startdate<@thisprocesstime order by startdate desc
+	set rowcount 0
+	SELECT InfoID,Title,ModuleID from C_Info where ApproveStatus=1 and (PubDate> @lasteprocesstime and PubDate<= @thisprocesstime) or (ExpireDate> @lasteprocesstime and ExpireDate<= @thisprocesstime)
+END
+GO
+
+CREATE TABLE dbo.C_InfoVersions
+	(
+	InfoVersionID int NOT NULL IDENTITY (1, 1),
+	InfoID int NOT NULL,
+	Content ntext NOT NULL,
+	CreateDate datetime NOT NULL,
+	CreateUserID int NULL
+	)  ON [PRIMARY]
+	 TEXTIMAGE_ON [PRIMARY]
+GO
+ALTER TABLE dbo.C_InfoVersions ADD CONSTRAINT
+	DF_C_InfoVersions_CreateDate DEFAULT getdate() FOR CreateDate
+GO
+ALTER TABLE dbo.C_InfoVersions ADD CONSTRAINT
+	PK_C_InfoVersions PRIMARY KEY CLUSTERED 
+	(
+	InfoVersionID
+	) ON [PRIMARY]
+
+GO
+ALTER TABLE dbo.C_InfoVersions ADD CONSTRAINT
+	FK_C_InfoVersions_C_info FOREIGN KEY
+	(
+	InfoID
+	) REFERENCES dbo.C_info
+	(
+	InfoID
+	) ON DELETE CASCADE
+	
+GO
+
+CREATE PROCEDURE C_Info_GetInfoVersions 
+	@InfoId int = 0 
+AS
+BEGIN
+	SET NOCOUNT ON;
+	SELECT [InfoVersionID]
+      ,[InfoID]      
+      ,[CreateDate]
+      ,[CreateUserID]
+      ,DisplayName as Creator
+  FROM [C_InfoVersions] left join users on [CreateUserID]=UserId
+	Where [InfoID]=@InfoId
+END
+GO
+
+CREATE PROCEDURE C_Info_GetInfoVersionByID
+	@InfoVersionID int = 0 
+AS
+BEGIN
+	SELECT [InfoVersionID]
+      ,[InfoID]
+      ,[Content]      
+      ,[CreateDate]
+      ,[CreateUserID]
+      ,DisplayName as Creator
+  FROM [C_InfoVersions] left join users on [CreateUserID]=UserId
+	Where [InfoVersionID]=@InfoVersionID
+END
+GO
+
+CREATE PROCEDURE C_Info_AddInfoVersion 
+	@InfoId int, 
+	@Content ntext,
+	@CreateUserID int
+AS
+BEGIN
+INSERT INTO [C_InfoVersions]
+           ([InfoID]
+           ,[Content]
+           ,[CreateUserID])
+     VALUES
+           (@InfoID
+           ,@Content
+           ,@CreateUserID)
+   SELECT Scope_identity()
+END
+GO
+
+CREATE PROCEDURE C_Info_DeleteInfoVersion 
+	@InfoVersionID int 
+AS
+BEGIN
+	DELETE [C_InfoVersions]
+	Where InfoVersionID=@InfoVersionID
+END
+GO
+
+CREATE PROCEDURE C_Info_Page_DeleteByInfoID 
+	@InfoId int
+AS
+BEGIN
+DELETE C_InfoPage WHERE InfoID=InfoId
+END
+GO
+
+Create function [dbo].[C_InfoWorkFlowGetNextActiveName] (
+	@ItemID int)
+returns nvarchar(200)
+as
+begin
+declare @ApproveStatus int
+declare @ModuleID int
+declare @ActiveName nvarchar(200)
+select @ApproveStatus=ApproveStatus,@ModuleID=ModuleID from C_Info where InfoID=@ItemID
+if @ApproveStatus=0
+begin
+	declare @WfID int
+	declare @Activeid int
+	select @WfID=SettingValue from ModuleSettings where ModuleID=@ModuleID and SettingName='WfID'
+	if not (@WfID is null or @WfID=-1)
+	begin
+		Declare @wfTraceID int
+		declare @wfStatus int
+			select @wfTraceID=max(wftraceID) from wftrace where ActiveID in
+			(select activeid from wfActive where WfID=@WfID) and itemid=@ItemID
+			if @wfTraceID is null
+			begin
+				set @ActiveName = 'Start'
+			end
+			else
+			begin
+				select @wfStatus=wfStatus,@Activeid=ActiveId from wftrace where wfTraceID=@wfTraceID
+				 if @wfStatus=0
+				 begin
+					select @Activeid = [RejectActiveID] from wfActive where ActiveID=@Activeid
+					select @ActiveName = ActiveName from wfActive where ActiveID=@Activeid
+				 end
+				 else
+				 begin
+					select @Activeid = min([ActiveID]) from wfActive where ActiveID>@Activeid and wfid=@WfID
+					select @ActiveName = ActiveName from wfActive where ActiveID=@Activeid					
+				 end
+			 end
+	end
+end
+return @ActiveName
+end
+GO
+
+ALTER     PROCEDURE C_info_GetSingleInfo
+    @InfoID int
+AS
+    SELECT C_Info.*, Users.DisplayName as Creator, users2.DisplayName as CheckoutUser ,Modules.ModuleTitle,Modules.PortalID,(Select MIN(t.TabID) from TabModules tm inner join Tabs t on tm.TabId=t.TabId where ModuleId = C_Info.ModuleId and t.IsDeleted=0) as TabID
+FROM C_Info inner join Modules on C_Info.ModuleId = Modules.ModuleId left join Users on CreatedByUser = Users.UserID left join Users users2 on checkoutuserid = Users2.UserID
+ WHERE InfoID=@InfoID
+GO
+
+ALTER  PROCEDURE [dbo].[C_InfoGetList]
+@PageSize int,
+@CurrentPage int,
+@OrderBy nvarchar(50),
+@SearchCondition varchar(7000),
+--@relatedModuleID use this parameter we can show mulity modules relitive search  by one artitcle
+@relatedModuleIDs varchar(1000),
+@filterUserRoleId int,
+--@IsAdmin use this parameter , we can impore efficiency because we will not need transfer other function use by admin like 'C_InfoWorkFlowGetStatus'
+@IsAdmin bit
+as
+
+declare @sqlstring VARCHAR(8000)
+set @sqlstring=N'
+declare @indextable table(id int identity(1,1),nid int,isRelative bit,CreateDate1 datetime,SortDate1 datetime,SortTop1 bit,Hits1 int,ModuleTitle nvarchar(256),PortalId int)
+declare @PageLowerBound int
+declare @PageUpperBound int
+set @PageLowerBound=('+ cast(@CurrentPage as nvarchar) +'-1)*'+ cast(@PageSize as nvarchar) +'
+set @PageUpperBound=@PageLowerBound+'+ cast(@PageSize as nvarchar) +' 
+--set rowcount @PageUpperBound
+insert into @indextable(nid,isRelative,CreateDate1,SortDate1,SortTop1,Hits1,ModuleTitle,PortalId)
+select InfoID,0 as isRelative,CreateDate,SortDate,SortTop,Hits,ModuleTitle,PortalId from C_Info inner join Modules on C_Info.ModuleId=Modules.ModuleId where Modules.IsDeleted=0'
+if(@filterUserRoleId > -1)
+begin
+set @sqlstring=@sqlstring+' And C_Info.InfoID in( SELECT C_info.InfoId
+FROM C_InfoItemRole INNER JOIN
+      UserRoles ON C_InfoItemRole.RoleId = UserRoles.RoleID RIGHT OUTER JOIN
+      C_info ON C_InfoItemRole.InfoId = C_info.InfoID
+WHERE UserRoles.UserID IS NULL OR UserRoles.UserID =  '+cast(@filterUserRoleId as varchar(10)) + ')'
+end
+set @sqlstring=@sqlstring+ @SearchCondition
+
+if @relatedModuleIDs<>''
+begin
+set @SearchCondition = lower(@SearchCondition)
+set @SearchCondition = replace(@SearchCondition,'c_info.moduleid=','c_info.moduleid<>')
+set @SearchCondition = replace(@SearchCondition,'c_info.moduleid =','c_info.moduleid<>')
+set @SearchCondition = replace(@SearchCondition,'c_info.moduleid in','c_info.moduleid not in')
+set @sqlstring=@sqlstring+ ' 
+union all
+select C_Info.InfoID,1 as isRelative,CreateDate,SortDate,SortTop,Hits,ModuleTitle,PortalId from C_Info 
+Inner Join C_InfoModuleInfos On C_Info.InfoID=C_InfoModuleInfos.InfoID inner join Modules on C_Info.ModuleId=Modules.ModuleId where Modules.IsDeleted=0 and C_InfoModuleInfos.ModuleID in('+@relatedModuleIDs +')' + @SearchCondition
+end
+if(@filterUserRoleId >-1)
+begin
+set @sqlstring=@sqlstring+'  And C_Info.InfoID in( SELECT C_info.InfoId
+FROM C_InfoItemRole INNER JOIN
+      UserRoles ON C_InfoItemRole.RoleId = UserRoles.RoleID RIGHT OUTER JOIN
+      C_info ON C_InfoItemRole.InfoId = C_info.InfoID
+WHERE UserRoles.UserID IS NULL OR UserRoles.UserID =  '+cast(@filterUserRoleId as varchar(10)) + ')'
+end
+set @sqlstring=@sqlstring+' order by ' + @OrderBy
++ '
+ select @@RowCount'
++ ' 
+select InfoID,ModuleID,ModuleTitle,PortalId,CreatedByUser,CreateDate,Title,ShortTitle,Description,
+    Source,KeyWords,SetOrder,IsExtURL,ExtURL,Level,
+    CategoryID,Author,Image,ImagePosition,ImageSize,ExpireDate,PubDate,
+    Email,URL,Syndicate,SortTop,Recommend,TitleStyle,Hits,ApproveStatus,isRelative,CheckoutUserId'
+if @IsAdmin=1
+begin
+set @sqlstring=@sqlstring+',
+    dbo.C_InfoGetCategory(categoryID) as CategoryName,
+    dbo.C_InfoGetPagers(InfoID) as Pagers,
+    dbo.C_InfoWorkFlowGetStatus(InfoID) as WorkFlowStatus,
+    dbo.C_InfoWorkFlowGetNextActiveName(InfoID) as WorkFlowNextStep,
+    (select displayname from users where userid=checkoutuserid) as CheckoutUser,
+    dbo.C_info_GetSpecsByInfoID(InfoID) as Specs,
+        (select count(*) from C_InfoVersions where InfoID=C_Info.InfoID) as VersionCount'
+end
+set @sqlstring=@sqlstring+'
+from C_Info inner join @indextable as t on C_Info.InfoID=t.nid '
+
+if @PageSize<>0
+	set @sqlstring=@sqlstring+' and t.id>@PageLowerBound and t.id<=@PageUpperBound '
+
+set @sqlstring=@sqlstring+'order by t.id'
+--print(@sqlstring)
+exec (@sqlstring)
+
+--C_InfoGetList 1,1,"createdate desc",'',1,1
+GO
+
+ALTER PROCEDURE [C_Info_CopyInfo]
+@InfoId int,
+@toModuleIds varchar(2000)
+AS
+declare @wfId int
+declare @ActiveID int
+declare @ApproveStatus int
+declare @newInfoId int
+declare @newInfoIds varchar(8000)
+set @newInfoIds = ''
+if charindex(',',@toModuleIds,len(@toModuleIds))<>len(@toModuleIds)
+begin
+set @toModuleIds = @toModuleIds+','
+end
+declare @newModuleId varchar(20)
+declare @nStartIndex int
+declare @nCommaIndex int
+set @nStartIndex = 1
+set @nCommaIndex = charindex(',',@toModuleIds)
+while @nCommaIndex > 0
+begin
+set @newModuleId = SubString(@toModuleIds,@nStartIndex,@nCommaIndex - @nStartIndex)
+SELECT @wfId=SettingValue
+FROM ModuleSettings
+WHERE (SettingName = N'WfId') AND (ModuleID = @newModuleId)
+if @wfId > 0
+begin
+set @ApproveStatus = 0
+select @ActiveID=ActiveID from wfActive where wfid=@wfid and stepnum=1
+end
+else
+begin
+set @ApproveStatus = 1
+set @ActiveID = 0
+end
+--只复制信息本身，不复制分类、专题、扩展等相关信息
+INSERT INTO C_info
+(ModuleID, CreatedByUser, CreateDate, SortDate, Title,ShortTitle, Description, Content, Source, 
+KeyWords, SetOrder, IsExtURL, ExtURL, [Level], Author, Image, 
+ImagePosition, ImageSize, ExpireDate, AttachFile, Email, URL, Doc1, Doc2, Doc3, 
+Doc4, Doc5, Doc6, Doc7, Doc8, Syndicate, Recommend, TitleStyle, ApproveStatus,InfoGuid)
+SELECT @newModuleId, CreatedByUser, CreateDate, SortDate, Title,ShortTitle, Description, 
+Content, Source, KeyWords, SetOrder, IsExtURL, ExtURL, [Level], Author, 
+Image, ImagePosition, ImageSize, ExpireDate, AttachFile, Email, URL, Doc1, Doc2, 
+Doc3, Doc4, Doc5, Doc6, Doc7, Doc8, Syndicate, Recommend, TitleStyle, 
+@ApproveStatus,newid()
+FROM C_info
+WHERE (InfoID = @InfoId)
+
+
+set @newInfoId=Scope_Identity()
+if @newInfoIds <>''
+begin
+	set @newInfoIds = @newInfoIds +','
+end
+set @newInfoIds =@newInfoIds + convert(varchar(10),@newInfoId)
+--分页
+INSERT INTO C_InfoPage
+      (InfoID, Title, Content, SetOrder)
+SELECT @newInfoId, Title, Content, SetOrder
+FROM C_InfoPage WHERE InfoId = @InfoId
+
+if @ActiveID>0
+begin
+	INSERT INTO [wfTrace]
+           ([ProcessID],[ItemID],[wfStatus],[Description],[Remark],[ActiveID],[CreateDate],[UserID])
+     VALUES
+           (convert(varchar(20),getdate(),112) + '-' + convert(varchar(20),@newInfoId)
+           ,@newInfoId,1,'','',@ActiveID,getdate(),-1)
+end
+
+set @nStartIndex = @nCommaIndex + 1
+set @nCommaIndex = charindex(',',@toModuleIds,@nStartIndex)
+end
+
+select @newInfoIds
+GO
+
+ALTER      PROCEDURE [C_info_MoveC_Info]
+    @InfoIDs nvarchar(2000),
+     @ModuleID int
+AS    
+declare @wfId int
+declare @ActiveID int
+declare @ApproveStatus int
+declare @newInfoId int
+
+set @InfoIDs = @InfoIDs+','
+
+declare @nStartIndex int
+declare @nCommaIndex int
+set @nStartIndex = 1
+set @nCommaIndex = charindex(',',@InfoIDs)
+while @nCommaIndex > 0
+begin
+set @newInfoId = SubString(@InfoIDs,@nStartIndex,@nCommaIndex - @nStartIndex)
+
+SELECT @wfId=SettingValue
+FROM ModuleSettings
+WHERE (SettingName = N'WfId') AND (ModuleID = @ModuleID)
+if @wfId > 0
+begin
+set @ApproveStatus = 0
+select @ActiveID=ActiveID from wfActive where wfid=@wfid and stepnum=1
+end
+else
+begin
+set @ApproveStatus = 1
+set @ActiveID = 0
+end
+
+update C_Info set ModuleID=@ModuleID,ApproveStatus=@ApproveStatus where infoID= @newInfoId
+
+if @ActiveID>0
+begin
+	INSERT INTO [wfTrace]
+           ([ProcessID],[ItemID],[wfStatus],[Description],[Remark],[ActiveID],[CreateDate],[UserID])
+     VALUES
+           (convert(varchar(20),getdate(),112) + '-' + convert(varchar(20),@newInfoId)
+           ,@newInfoId,1,'','',@ActiveID,getdate(),-1)
+end
+
+set @nStartIndex = @nCommaIndex + 1
+set @nCommaIndex = charindex(',',@InfoIDs,@nStartIndex)
+end
+GO
+

@@ -1,0 +1,2 @@
+<%@ Control Language="vb" AutoEventWireup="false" Inherits="EasySite.Modules.C_Info.SkinObjectNav" Codebehind="SkinObjectNav.ascx.vb" %>
+<asp:Literal runat="server" ID="litResult" EnableViewState="false"></asp:Literal>

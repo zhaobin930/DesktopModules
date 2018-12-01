@@ -1,0 +1,89 @@
+﻿/*
+This version is modified by tph,2008-02
+1.C_info_INSERT 存储过程增加SortDate参数
+*/
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+
+Create Procedure C_Info_GetInfoModuleRelated
+@moduleId int
+AS
+declare @strModuleId varchar(10)
+set @strModuleId = convert(varchar(10),@moduleId)
+SELECT DISTINCT ModuleSettings.ModuleId
+FROM ModuleSettings INNER JOIN
+      Modules ON ModuleSettings.ModuleID = Modules.ModuleID INNER JOIN
+      TabModules ON Modules.ModuleID = TabModules.ModuleID INNER JOIN
+      Tabs ON TabModules.TabID = Tabs.TabID
+WHERE (Modules.IsDeleted = 0) AND (Tabs.IsDeleted = 0) AND 
+(
+      (ModuleSettings.SettingName = N'MoreModules')AND 
+      (
+	(ModuleSettings.SettingValue = @strModuleId)
+	OR(ModuleSettings.SettingValue LIKE @strModuleId +',%')
+	OR(ModuleSettings.SettingValue LIKE '%,'+@strModuleId)
+	OR(ModuleSettings.SettingValue LIKE '%,'+@strModuleId+',%')
+	) 
+	OR
+      (ModuleSettings.SettingName = N'UpShowModues') AND 
+      (
+	(ModuleSettings.SettingValue = @strModuleId)
+	OR(ModuleSettings.SettingValue LIKE @strModuleId +',%')
+	OR(ModuleSettings.SettingValue LIKE '%,'+@strModuleId)
+	OR(ModuleSettings.SettingValue LIKE '%,'+@strModuleId+',%')
+	) 
+)
+GO
+
+CREATE PROCEDURE C_Info_GetSpecModuleByInfoID
+@InfoID int
+  AS
+SELECT ModuleSettings.ModuleID
+FROM C_InfoSpecInfo INNER JOIN
+      ModuleSettings ON 
+      C_InfoSpecInfo.SpecID = ModuleSettings.SettingValue INNER JOIN
+      ModuleSettings ModuleSettings_1 ON 
+      ModuleSettings.ModuleID = ModuleSettings_1.ModuleID
+WHERE (ModuleSettings.SettingName = N'ModuleSpecID') AND 
+      (ModuleSettings_1.SettingName = N'ModuleType') AND 
+      (ModuleSettings_1.SettingValue = N'Spec') AND (C_InfoSpecInfo.InfoID = @InfoID )
+GO
+
+ALTER PROCEDURE C_info_GetCategoryByParentID
+    @ParentID int,
+    @ModuleID int,
+    @PortalID int
+AS
+    SELECT * FROM C_InfoCategory WHERE ParentID=@ParentID AND (ModuleID=@ModuleID Or @ModuleID=-1) And PortalID=@PortalID
+    order by setorder desc
+GO
+
+Alter PROCEDURE C_info_GetCategorysByModule
+    @ModuleID int,
+    @PortalID int
+AS
+    SELECT CategoryID,Name,SetOrder,ModuleID,[level],ParentID,
+ 'HasChildren' = case when exists (select 1 from C_InfoCategory C2 where C2.ParentId = C_InfoCategory.CategoryID) then '1' else '0' end
+ FROM C_InfoCategory WHERE (ModuleID=@ModuleID OR @ModuleID=-1) And PortalId=@PortalID  order by parentid,setorder desc
+
+GO
+
+UPDATE C_InfoCategory
+SET portalid = modules.portalid
+FROM modules
+WHERE c_infocategory.portalid = - 1 AND modules.moduleid = c_infocategory.moduleid
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[dbo].[C_Info_GetCategorysByPortal]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure [dbo].[C_Info_GetCategorysByPortal]
+GO
+
+
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+

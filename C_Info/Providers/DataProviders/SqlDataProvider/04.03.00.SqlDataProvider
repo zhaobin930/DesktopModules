@@ -1,0 +1,106 @@
+﻿/*
+This version is created by tph,2006-11
+1.添加分类属于站点的字段，可以在站点级别按类统计
+2.完善与分类相关的所有显示与设置
+3.增加评论的方式
+4.增加标题的提示
+5.静态详细信息可以计数
+6.实现了ISearchable接口
+*/
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS ON 
+GO
+ALTER TABLE [C_InfoCategory] ADD PortalId int
+DEFAULT (- 1)
+
+GO
+
+if exists (select * from {databaseOwner}{objectQualifier}sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}[C_Info_GetCategorysByPortal]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}[C_Info_GetCategorysByPortal]
+GO
+
+CREATE      PROCEDURE C_Info_GetCategorysByPortal
+    @PortalID int
+AS
+    SELECT CategoryID,Name,SetOrder,ModuleID,[level],ParentID,
+ 'HasChildren' = case when exists (select 1 from C_InfoCategory C2 where C2.ParentId = C_InfoCategory.CategoryID) then '1' else '0' end
+ FROM C_InfoCategory WHERE PortalID=@PortalID order by parentid,setorder desc
+GO
+
+
+alter     PROCEDURE C_info_AddCategory
+    @Name nvarchar(200),
+    @ModuleID int,
+    @PortalId int,
+    @ParentID int
+AS
+    insert into C_InfoCategory(Name,ModuleID,PortalId,ParentID)
+      values(@Name,@ModuleID,@PortalId,@ParentID)
+declare @CategoryID int
+set @CategoryID=@@identity
+
+--setorder??
+declare @SetOrder int
+set @SetOrder=1
+select @SetOrder=isnull(max(setorder),0)+1 from C_InfoCategory where ParentID=@ParentID
+update C_InfoCategory set SetOrder=@SetOrder where CategoryID=@CategoryID
+
+--level??
+if @ParentID<>-1
+begin
+declare @level int
+select @level=level+1 from C_InfoCategory where CategoryID=@ParentID
+update C_InfoCategory set level=@level where CategoryID=@CategoryID
+end
+GO
+
+
+alter PROCEDURE C_info_GetCategoryByParentID
+    @ParentID int,
+    @ModuleID int
+AS
+    SELECT * FROM C_InfoCategory WHERE ParentID=@ParentID And (ModuleID=@ModuleID)
+    order by setorder desc
+GO
+
+
+if exists (select * from {databaseOwner}{objectQualifier}sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}[C_Info_GetHits]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}[C_Info_GetHits]
+GO
+
+CREATE       PROCEDURE C_Info_GetHits
+     @InfoID int
+
+AS
+
+Select hits from C_Info where InfoID=@InfoID
+GO
+
+if exists (select * from {databaseOwner}{objectQualifier}sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}[C_Info_UpdateAndGetHits]') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}[C_Info_UpdateAndGetHits]
+GO
+
+CREATE       PROCEDURE C_Info_UpdateAndGetHits
+     @InfoID int
+
+AS
+
+Update C_Info Set Hits=Hits+1 where InfoID=@InfoID
+
+Select Hits from C_Info where InfoID=@InfoID
+GO
+
+CREATE       PROCEDURE C_Info_GetHitsArray
+     @InfoIDs varchar(3000)
+AS
+
+exec('Select InfoID,Hits from C_Info where InfoID in('+@InfoIDs+')')
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+

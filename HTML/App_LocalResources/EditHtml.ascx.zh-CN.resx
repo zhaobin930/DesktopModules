@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="ResMimeType">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="Version">
+		<value>1.0.0.0</value>
+	</resheader>
+	<resheader name="Reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="Writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="plDesktopSummary.Text">
+    <value>搜索摘要(可选)</value>
+	</data>
+	<data name="plDesktopSummary.Help">
+    <value>请输入一个摘要，主要是为了方便搜索引擎对该内容进行检索索引</value>
+	</data>
+	<data name="cmdPreview.Text">
+    <value>预览</value>
+	</data>
+	<data name="ModuleHelp.Text">
+    <value>&lt;p&gt;文字/HTML模块提供文本、HTML网页内容的管理，用户可以方便的使用所见即所得的HTML编辑器进行内容编辑管理，实现各种静态网页、图文混排等各种功能。文字和HTML两种方式，主要有如下5点区别: &lt;/P&gt;
+&lt;OL&gt;
+&lt;LI&gt;&lt;STRONG&gt;文字/文字&lt;/strong&gt;:可以显示文字和HTML标记内容。文本输入换行可以使用回车进行换行，文本样式是通过您的站点CSS样式表来控制。 
+&lt;li&gt;&lt;strong&gt;文字/HTML&lt;/strong&gt;: 以HTML方式显示文本。
+&lt;li&gt;&lt;strong&gt;文字/不处理&lt;/strong&gt;: 显示基本的文本格式，保持原来的文本样式不变。
+&lt;li&gt;&lt;strong&gt;HTML编辑器/HTML&lt;/strong&gt;: 允许您从其他来源信息中拷贝HTML到编辑器中粘贴功能。
+&lt;li&gt;&lt;strong&gt;HTML编辑器/设计&lt;/strong&gt;: 可以通过我们强大的(所见即所得)easyEditor编辑器处理软件各种网页内容编辑，譬如：超链接、 电子邮件链接、文件管理器、插入图片、插入Flash、插入模块模版标签、拼写检查等丰富功能。</value>
+	</data>
+	<data name="ControlTitle_edit.Text">
+    <value>编辑文字/HTML</value>
+	</data>
+	<data name="AddContent.Text">
+    <value>增加内容...</value>
+	</data>
+</root>

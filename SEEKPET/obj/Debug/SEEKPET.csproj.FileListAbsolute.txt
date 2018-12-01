@@ -1,0 +1,15 @@
+E:\EasySite\SEEKPET\web\DesktopModules\SEEKPET\bin\SEEKPET.dll
+E:\EasySite\SEEKPET\web\DesktopModules\SEEKPET\bin\SEEKPET.pdb
+E:\EasySite\SEEKPET\web\DesktopModules\SEEKPET\obj\Debug\SEEKPET.dll
+E:\EasySite\SEEKPET\web\DesktopModules\SEEKPET\obj\Debug\SEEKPET.pdb
+E:\EasySite\SEEKPET\web\bin\SEEKPET.dll
+E:\EasySite\SEEKPET\web\bin\SEEKPET.pdb
+E:\觅宠\web\bin\SEEKPET.dll
+E:\觅宠\web\bin\SEEKPET.pdb
+E:\觅宠\web\DesktopModules\SEEKPET\obj\Debug\SEEKPET.dll
+E:\觅宠\web\DesktopModules\SEEKPET\obj\Debug\SEEKPET.pdb
+D:\project\觅宠\觅宠\web\bin\SEEKPET.dll
+D:\project\觅宠\觅宠\web\bin\SEEKPET.pdb
+D:\project\觅宠\觅宠\web\DesktopModules\SEEKPET\obj\Debug\SEEKPET.csprojResolveAssemblyReference.cache
+D:\project\觅宠\觅宠\web\DesktopModules\SEEKPET\obj\Debug\SEEKPET.dll
+D:\project\觅宠\觅宠\web\DesktopModules\SEEKPET\obj\Debug\SEEKPET.pdb

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="plModuleType.Text" xml:space="preserve">
+    <value>模块类型</value>
+  </data>
+  <data name="plModuleType.Help" xml:space="preserve">
+    <value>内容管理模块的显示类型</value>
+  </data>
+  <data name="InfoModule.Text" xml:space="preserve">
+    <value>信息模块</value>
+  </data>
+  <data name="SpecModule.Text" xml:space="preserve">
+    <value>专题模块</value>
+  </data>
+  <data name="CategoryModule.Text" xml:space="preserve">
+    <value>分类模块</value>
+  </data>
+  <data name="SearchModule.Text" xml:space="preserve">
+    <value>搜索模块</value>
+  </data>
+  <data name="SearchList.Text" xml:space="preserve">
+    <value>搜索结果</value>
+  </data>
+  <data name="DetailModule.Text" xml:space="preserve">
+    <value>详细信息</value>
+  </data>
+  <data name="UpInfoModule.Text" xml:space="preserve">
+    <value>最新信息</value>
+  </data>
+  <data name="MoreListModule.Text" xml:space="preserve">
+    <value>更多信息</value>
+  </data>
+  <data name="plCategoryRows.Text" xml:space="preserve">
+    <value>显示行数</value>
+  </data>
+  <data name="plCategoryRows.Help" xml:space="preserve">
+    <value>分类列表显示的行数</value>
+  </data>
+  <data name="plCategoryColumns.Text" xml:space="preserve">
+    <value>显示列数</value>
+  </data>
+  <data name="plCategoryColumns.Help" xml:space="preserve">
+    <value>分类列表显示的列数</value>
+  </data>
+  <data name="plCategoryLinkStyle.Text" xml:space="preserve">
+    <value>链接样式</value>
+  </data>
+  <data name="plCategoryLinkStyle.Help" xml:space="preserve">
+    <value>链接的样式</value>
+  </data>
+  <data name="_Blank.Text" xml:space="preserve">
+    <value>弹出新页</value>
+  </data>
+  <data name="_Self.Text" xml:space="preserve">
+    <value>当前页显示</value>
+  </data>
+  <data name="plCategoryStyle.Text" xml:space="preserve">
+    <value>显示样式</value>
+  </data>
+  <data name="plCategoryStyle.Help" xml:space="preserve">
+    <value>列表的显示样式(可加Html)，可用的标签有[分类][子分类][文章]</value>
+  </data>
+  <data name="plSearchStyle.Text" xml:space="preserve">
+    <value>搜索样式</value>
+  </data>
+  <data name="plSearchStyle.Help" xml:space="preserve">
+    <value>搜索样式</value>
+  </data>
+  <data name="plImageURL.Text" xml:space="preserve">
+    <value>搜索按钮图标</value>
+  </data>
+  <data name="plImageURL.Help" xml:space="preserve">
+    <value>搜索按钮的图标文件</value>
+  </data>
+  <data name="plModules.Text" xml:space="preserve">
+    <value>搜索模块</value>
+  </data>
+  <data name="plModules.Help" xml:space="preserve">
+    <value>搜索信息的模块来源，如果勾选站点的同时勾选模块，则这些模块将排除掉</value>
+  </data>
+  <data name="plSearchClass.Text" xml:space="preserve">
+    <value>搜索框CSS</value>
+  </data>
+  <data name="plUpShowMode.Text" xml:space="preserve">
+    <value>显示类别</value>
+  </data>
+  <data name="plUpShowMode.Help" xml:space="preserve">
+    <value>显示类别，如果不选择则按照属性设置里设定的排序方式显示</value>
+  </data>
+  <data name="MostNew.Text" xml:space="preserve">
+    <value>最新信息</value>
+  </data>
+  <data name="MostHot.Text" xml:space="preserve">
+    <value>最热信息</value>
+  </data>
+  <data name="plUpShowDateScope.Text" xml:space="preserve">
+    <value>时间段</value>
+  </data>
+  <data name="plUpShowDateScope.Help" xml:space="preserve">
+    <value>最新最热信息显示的时间段</value>
+  </data>
+  <data name="All.Text" xml:space="preserve">
+    <value>所有</value>
+  </data>
+  <data name="Week.Text" xml:space="preserve">
+    <value>一周内</value>
+  </data>
+  <data name="Month.Text" xml:space="preserve">
+    <value>一月内</value>
+  </data>
+  <data name="Year.Text" xml:space="preserve">
+    <value>一年内</value>
+  </data>
+  <data name="plUpShowModues.Text" xml:space="preserve">
+    <value>显示模块</value>
+  </data>
+  <data name="plUpShowModues.Help" xml:space="preserve">
+    <value>最新信息的模块来源，如果勾选站点的同时勾选模块，则这些模块将排除掉</value>
+  </data>
+  <data name="Save.Text" xml:space="preserve">
+    <value>保 存</value>
+  </data>
+  <data name="Cancel.Text" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="KeyWords.Text" xml:space="preserve">
+    <value>关键词</value>
+  </data>
+  <data name="SelectShowSpec.Text" xml:space="preserve">
+    <value>请选择显示专题</value>
+  </data>
+  <data name="plCategoryViewType.Text" xml:space="preserve">
+    <value>列表显示方式</value>
+  </data>
+  <data name="plCategoryViewType.Help" xml:space="preserve">
+    <value>请选择列表中要显示的内容类别</value>
+  </data>
+  <data name="CategoryViewType-ListCategory.Text" xml:space="preserve">
+    <value>分类列表</value>
+  </data>
+  <data name="CategoryViewType-ListArticle.Text" xml:space="preserve">
+    <value>文章列表</value>
+  </data>
+  <data name="CategoryViewType-ListCategoryWithSubArticle.Text" xml:space="preserve">
+    <value>分类+文章列表</value>
+  </data>
+  <data name="CategoryViewType-ListArticleWithSub.Text" xml:space="preserve">
+    <value>文章+子分类文章</value>
+  </data>
+  <data name="plCategory.Text" xml:space="preserve">
+    <value>请选择父分类</value>
+  </data>
+  <data name="plCategory.Help" xml:space="preserve">
+    <value>请选择此模块显示或新增文章所属父分类</value>
+  </data>
+  <data name="plCSearchAction.Text" xml:space="preserve">
+    <value>直接显示列表</value>
+  </data>
+  <data name="Recommend.Text" xml:space="preserve">
+    <value>推荐信息</value>
+  </data>
+  <data name="CategoryViewType-ListCategoryNoChange.Text" xml:space="preserve">
+    <value>固定列表</value>
+  </data>
+  <data name="Day.Text" xml:space="preserve">
+    <value>一天内</value>
+  </data>
+  <data name="plRelativeListMode.Help" xml:space="preserve">
+    <value>通过哪种方式来确定相关信息</value>
+  </data>
+  <data name="plRelativeListMode.Text" xml:space="preserve">
+    <value>相关模式</value>
+  </data>
+  <data name="plRelativeListModues.Help" xml:space="preserve">
+    <value>相关信息的模块来源</value>
+  </data>
+  <data name="plRelativeListModues.Text" xml:space="preserve">
+    <value>相关模块来源</value>
+  </data>
+  <data name="RelativeKeywords.Text" xml:space="preserve">
+    <value>通过文章关键字</value>
+  </data>
+  <data name="RelativeListModule.Text" xml:space="preserve">
+    <value>相关信息</value>
+  </data>
+  <data name="RelativeModule.Text" xml:space="preserve">
+    <value>通过相同的模块号</value>
+  </data>
+</root>

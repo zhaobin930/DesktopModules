@@ -1,0 +1,28 @@
+﻿<easysite version="3.0" type="Module">
+  <folders>
+    <folder>
+      <name>SEEKPET.Module</name>
+      <friendlyname>mo_寻宠管理</friendlyname>
+      <foldername>SEEKPET.Module</foldername>
+      <description>mo_寻宠管理</description>
+      <version>01.00.00</version>
+      <businesscontrollerclass>SEEKPET.Module.dll</businesscontrollerclass>
+      <modules>
+        <module>
+          <friendlyname>mo_寻宠管理</friendlyname>
+          <controls>
+            <control>
+              <src>AnimalSeekManage.ascx</src>
+              <type>View</type>
+            </control>
+          </controls>
+        </module>
+      </modules>
+      <files>
+        <file>
+          <name>SEEKPET.Module.dll</name>
+        </file>
+      </files>
+    </folder>
+  </folders>
+</easysite>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="ResMimeType">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="Version">
+		<value>1.0.0.0</value>
+	</resheader>
+	<resheader name="Reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="Writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="NoConfigure.Text">
+		<value>模块没有配置流程属性</value>
+	</data>
+	<data name="HaveFinish.Text">
+		<value>审批已结束!</value>
+	</data>
+	<data name="AuditUser.Header">
+		<value>审批人</value>
+	</data>
+	<data name="AuditDate.Header">
+		<value>审批时间</value>
+	</data>
+	<data name="AuditFinish.Header">
+		<value>审批结果</value>
+	</data>
+	<data name="AuditIdea.Header">
+		<value>审批意见</value>
+	</data>
+	<data name="AuditTime.Header">
+		<value>所用时间</value>
+	</data>
+	<data name="ViewWorkFlow.Text">
+		<value>查看流程</value>
+	</data>
+	<data name="AuditIdea.Text">
+		<value>审批意见</value>
+	</data>
+	<data name="Pass.Text">
+		<value>通过</value>
+	</data>
+	<data name="Reject.Text">
+		<value>拒绝</value>
+	</data>
+	<data name="CreateUser.Text">
+		<value>文档创建人:</value>
+	</data>
+	<data name="AuditPass.Text">
+		<value>审批通过</value>
+	</data>
+	<data name="AuditReject.Text">
+		<value>审批拒绝</value>
+	</data>
+	<data name="ConfirmPass.Text">
+		<value>确认要通过吗？</value>
+	</data>
+  <data name="ConfirmReject.Text">
+    <value>确认要拒绝吗</value>
+  </data>
+  <data name="Day.Text">
+    <value>天</value>
+  </data>
+  <data name="Hour.Text">
+    <value>小时</value>
+  </data>
+  <data name="Minute.Text">
+    <value>分</value>
+  </data>
+  <data name="ChooseStep.Text">
+    <value>选择步骤：</value>
+  </data>
+  <data name="Archive.Text">
+    <value>归档</value>
+  </data>
+  <data name="ConfirmArchive.Text">
+    <value>确认要归档吗？</value>
+  </data>
+  <data name="ApprovePreStep.ErrorMessage">
+    <value>通过时只能选择之后的步骤。</value>
+  </data>
+  <data name="RejectNextStep.ErrorMessage">
+    <value>驳回时只能选择之前的步骤。</value>
+  </data>
+</root>

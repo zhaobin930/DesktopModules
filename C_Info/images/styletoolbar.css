@@ -1,0 +1,62 @@
+﻿.styletoolbar
+{
+    background-color: WhiteSmoke;
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    cursor: default;
+}
+.tdButtonNoSel
+{
+    padding: 0px;
+    border: 1px;
+    background-repeat: no-repeat;
+    background-position-y: 2px;
+}
+.tdButtonSel
+{
+    padding: 0px;
+    border: 1px;
+    background-repeat: no-repeat;
+    background-position-y: 2px;
+    border-style: outset;
+    border-color: White;
+}
+.styletoolPane
+{
+    border-right: #999999 1px solid;
+    border-top: #cccccc 1px solid;
+    overflow-y: auto;
+    z-index: 100;
+    border-left: #cccccc 1px solid;
+    border-bottom: #999999 1px solid;
+    position: absolute;
+    background-color: #ffffff;
+}
+.stylemenuitem
+{
+    padding-right: 1px;
+    padding-left: 1px;
+    font-size: 12px;
+    padding-bottom: 1px;
+    color: #000000;
+    padding-top: 1px;
+    font-family: arial, sans-serif;
+    white-space: nowrap;
+    position: relative;
+    cursor: default;
+}
+.stylemenuitemhover
+{
+    padding-right: 1px;
+    padding-left: 1px;
+    font-size: 12px;
+    padding-bottom: 1px;
+    color: #000000;
+    padding-top: 1px;
+    font-family: arial, sans-serif;
+    white-space: nowrap;
+    position: relative;
+    cursor: default;
+    background-color: WhiteSmoke;
+}

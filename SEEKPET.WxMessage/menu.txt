@@ -1,0 +1,21 @@
+﻿{
+	"button": [{
+			"name": "MI生活",
+			"sub_button": [{
+				"type": "view",
+				"name": "主粮",
+				"url": "https://shop19215344.youzan.com/v2/showcase/homepage?alias=11luppfdv&redirect_count=3"
+			}]
+		},
+		{
+			"type": "view",
+			"name": "MI学堂",
+			"url": "http://bbs.seekpetm.com/misc.php?mod=mobile"
+		},
+		{
+			"type": "view",
+			"name": "MI社区",
+			"url": "http://www.seekpetm.com/"
+		}
+	]
+}

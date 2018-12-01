@@ -1,0 +1,296 @@
+﻿input[type=button], input[type=submit], input[type=file], button {
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+.toplogo {
+    padding-top: 50px;
+    padding-bottom: 100px;
+}
+
+    .toplogo p {
+        padding-top: 20px;
+        text-align: center;
+        color: #000000;
+        font-size: 16px;
+    }
+
+.bottomlogin {
+    margin: 0 auto;
+    width: 160px;
+    text-align: center;
+    height: 150px;
+}
+
+.bottomloginafter {
+    width: 120px;
+    text-align: center;
+    margin: 0 auto;
+}
+
+    .bottomloginafter span {
+        padding: 10px 10px;
+    }
+
+    .bottomloginafter .spname {
+        font-size: 16px;
+    }
+
+    .bottomloginafter .spsignout {
+        font-size: 14px;
+    }
+
+#qqLoginBtn {
+    display: block;
+    float: left;
+}
+
+#vxLoginBtn {
+    display: block;
+    float: left;
+    margin-left: 40px;
+}
+
+.homeli {
+    border-bottom: 1px solid #e7e7e7;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    display: inline-block;
+    width: 100%;
+}
+
+    .homeli div {
+        float: left;
+        line-height: 25px;
+        padding: 1px 0px;
+    }
+
+    .homeli .homepetimg {
+        width: 55px;
+    }
+
+    .homeli .homepetitem {
+        padding-left: 20px;
+        width: 50%;
+    }
+
+    .homeli .p1 {
+        color: #08979f;
+        font-size: 14px;
+        text-align: left;
+    }
+
+    .homeli .p2 {
+        color: #a1a1a1;
+        font-size: 12px;
+        text-align: left;
+    }
+
+.personanimal {
+    padding-top: 50px;
+    text-align: center;
+}
+
+.hospitalitem {
+    width: 100%;
+    text-align: left;
+    border-bottom: 4px #e9f1f3 solid;
+}
+
+    .hospitalitem:last-child {
+        border: none;
+    }
+
+    .hospitalitem .itemleft {
+        float: left;
+        line-height: 30px;
+        padding: 10px 0px;
+        width: 20%;
+    }
+
+    .hospitalitem .itemright {
+        float: left;
+        line-height: 30px;
+        padding: 10px 10px;
+        width: 80%;
+    }
+
+        .hospitalitem .itemright h2 {
+            color: #4c2c21;
+            font-size: 16px;
+        }
+
+        .hospitalitem .itemright p {
+            color: #a89b95;
+            font-size: 12px;
+        }
+
+.vxpay {
+    margin-top: 50px;
+}
+
+.paytip {
+    margin-top: 50px;
+}
+
+.peronbottom {
+    text-align: center;
+    padding-top: 50px;
+}
+
+    .peronbottom p {
+        padding-top: 20px;
+    }
+
+        .peronbottom p a {
+            color: #219da7;
+            font-size: 16px;
+        }
+
+    .peronbottom h2 img {
+        width: 40px;
+    }
+
+.uploadFile {
+    margin-bottom: 10px;
+}
+
+.uploadImg {
+}
+
+    .uploadImg img {
+        height: 80px;
+        border: 1px solid #CCCCCC;
+        display: block;
+    }
+
+.typeclass {
+    font-size: larger;
+    width: 100%;
+    text-align: center;
+}
+
+.normaltextsearch {
+    margin-top: 40px;
+    color: #ff9a66;
+    border: #ff9a66 1px solid;
+    width: 200px;
+    text-align: center;
+    padding: 2px 2px;
+    line-height: 30px;
+    height: 30px;
+}
+
+.normalbuttonsearch {
+    margin-top: 50px;
+    background-color: #ff9a66;
+    color: #fff;
+    width: 150px;
+    border: 0;
+    height: 30px;
+}
+
+.normaltextsearch2 {
+    margin-top: 40px;
+    color: #1f8d8c;
+    border: #1f8d8c 1px solid;
+    width: 200px;
+    text-align: center;
+    padding: 2px 2px;
+    line-height: 30px;
+    height: 30px;
+}
+
+.normaltextsearch3 {
+    margin-top: 10px;
+    color: #1f8d8c;
+    border: #1f8d8c 1px solid;
+    width: 200px;
+    text-align: center;
+    padding: 2px 2px;
+    line-height: 24px;
+    height: 24px;
+}
+
+.normalbuttonsearch2 {
+    margin-top: 50px;
+    background-color: #34cc67;
+    color: #fff;
+    width: 150px;
+    border: 0;
+    height: 30px;
+}
+
+.normalmultext {
+    border: #ff9a66 1px solid;
+    padding: 2px 2px;
+}
+
+.normalbutton2 {
+    width: 200px;
+    height: 24px;
+    background-color: #ff9966;
+    border-style: none;
+    color: #fff;
+}
+
+.codecontent p {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    text-align: center;
+}
+
+.codecontent .success {
+    font-size: 16px;
+}
+
+.popwindow {
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    opacity: 0.3; /*兼容IE8及以下版本浏览器*/
+    filter: alpha(opacity=30);
+    display: none;
+}
+
+.payafter {
+    border-radius: 5px;
+    width: 250px;
+    height: 120px;
+    background-color: #f9f9f9;
+    margin: auto;
+    position: absolute;
+    z-index: 3;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: none;
+}
+
+    .payafter h2 {
+        padding: 10px 5px;
+    }
+
+    .payafter .finishpay {
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        padding: 10px 5px;
+    }
+
+        .payafter .finishpay a {
+            color: Red;
+            font-size: 16px;
+        }
+
+    .payafter .nofinishpay {
+        padding: 10px 5px;
+    }
+
+        .payafter .nofinishpay a {
+            color: #666;
+        }
